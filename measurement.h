@@ -40,16 +40,16 @@ class measurements {
 
 
 
-        void take_measurement(const params& parameters){
+        void take_measurement(const parameters& parameters){
 
             /* ########### COMPUTE CURRENT OBSERVABLE VALUES FROM PARAMETERS ########
                The number of entries in vector "observables" must correspond to member variable "no_observables" set by the user
                in the constructor above. The reweighting for the adaptive schemes is done automatically by the "process_sample" routine. 
                The adaptive schemes will also automatically store the adaptive step size. */            
-            observables[0] = parameters.pos_x;	// x-coordinate
-            observables[1] = parameters.pos_y;  // y-coordinate
-            observables[2] = 0.5*(parameters.vel_x*parameters.vel_x + parameters.vel_y*parameters.vel_y);           // Tkin
-            observables[3] = -0.5*(parameters.pos_x*parameters.force_x + parameters.pos_y*parameters.force_y);      // Tconf
+            observables[0] = pos.x;	// x-coordinate
+            observables[1] = pos.y;  // y-coordinate
+            observables[2] = 0.5*(vel.x*vel.x + vel.y*vel.y);           // Tkin
+            observables[3] = -0.5*(pos.x*force.x + pos.y*force.y);      // Tconf
             /*########################################################################*/
 
             process_sample(parameters);   // compute (reweighted) time average and stores results for later print-out.
@@ -75,7 +75,7 @@ class measurements {
         int k{0}, ctr{0}, t_avg_normalizer{0};          // help variables
         const int burnin, t_meas, n_dist, max_iter;     
         double dt_sum{0};                               
-        void process_sample(const params& parameters);   // add new sample to time average and store result, implemented in .cpp file.
+        void process_sample(const parameters& parameters);   // add new sample to time average and store result, implemented in .cpp file.
 
 };
 
@@ -145,7 +145,7 @@ inline void measurements:: mpi_reduction(MPI_Comm& comm, const int& rank, const 
 
 inline void measurements:: process_sample(const params& parameters){
 
-    if (method_type==0){   // constant step size scheme, eg. BAOAB.
+    if (parameters.method_type==0){   // constant step size scheme, eg. BAOAB.
 
         for (int i=0; i<no_observables; ++i) observable_sums[i] += observables[i];  // add to sum for time average
 
@@ -158,7 +158,7 @@ inline void measurements:: process_sample(const params& parameters){
         }          
     }
 
-    else if (method_type==1){   // adaptive step size scheme.
+    else if (parameters.method_type==1){   // adaptive step size scheme.
 
         for (int i=0; i<no_observables; ++i) observable_sums[i] += observables[i] * parameters.dt;  // reweighting
         dt_sum += parameters.dt;
