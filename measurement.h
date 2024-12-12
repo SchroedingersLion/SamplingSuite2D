@@ -43,6 +43,7 @@ class Measurement {
                 observable_sums.resize(no_observables);
 
                 int no_elements {(max_iter-burnin) / (n_dist*t_meas)}; // Number of elements needed in the t-averaged results vector.
+                if (no_elements<0) throw std:: invalid_argument( "\n Combination of N_iteration, burnin, n_dist, and t_meas makes no sense. Is N_iter < burnin? \n" );
 
                 observable_tavgs = std:: vector <std:: vector <float>> (no_observables, std::vector <float> (no_elements));
 
