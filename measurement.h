@@ -17,8 +17,16 @@ class measurements {
     public:
 
         // constructor
-        measurements(const int method_type, const int burnin, const int t_meas, const int n_dist, const int max_iter):
-            method_type {method_type}, burnin {burnin}, t_meas {t_meas}, n_dist {n_dist}, max_iter {max_iter}
+        measurements(const int method_type, 
+                     const int burnin, 
+                     const int t_meas, 
+                     const int n_dist, 
+                     const int max_iter):
+                     method_type {method_type}, 
+                     burnin {burnin}, 
+                     t_meas {t_meas}, 
+                     n_dist {n_dist}, 
+                     max_iter {max_iter}
             {
                 
                 /*######## ENTER THE NUMBER OF OBSERVABLES TO COLLECT ############*/
@@ -28,12 +36,15 @@ class measurements {
 
                 observables.resize(no_observables);
                 observable_sums.resize(no_observables);
-                observable_tavgs = std:: vector <std:: vector <float>> (no_observables, std::vector <float> ((max_iter-burnin) / (n_dist*t_meas)));
+
+                int no_elements {(max_iter-burnin) / (n_dist*t_meas)}; // Number of elements needed in the t-averaged results vector.
+                
+                observable_tavgs = std:: vector <std:: vector <float>> (no_observables, std::vector <float> (no_elements));
 
                 // the adaptive schemes also collect the adaptive step sizes.
                 if (method_type==1){ 
-                    dt_vals_raw.resize( (max_iter-burnin) / (n_dist*t_meas));
-                    zeta_raw.resize( (max_iter-burnin) / (n_dist*t_meas));
+                    dt_vals_raw.resize(no_elements);
+                    zeta_raw.resize(no_elements);
                 } 
             
             };
@@ -46,10 +57,10 @@ class measurements {
                The number of entries in vector "observables" must correspond to member variable "no_observables" set by the user
                in the constructor above. The reweighting for the adaptive schemes is done automatically by the "process_sample" routine. 
                The adaptive schemes will also automatically store the adaptive step size. */            
-            observables[0] = pos.x;	// x-coordinate
-            observables[1] = pos.y;  // y-coordinate
-            observables[2] = 0.5*(vel.x*vel.x + vel.y*vel.y);           // Tkin
-            observables[3] = -0.5*(pos.x*force.x + pos.y*force.y);      // Tconf
+            observables[0] = parameters.position.x;	// x-coordinate
+            observables[1] = parameters.position.y;  // y-coordinate
+            observables[2] = 0.5*(parameters.velocity.x*parameters.velocity.x + parameters.velocity.y*parameters.velocity.y);   // Tkin
+            observables[3] = -0.5*(parameters.position.x*parameters.force.x + parameters.position.y*parameters.force.y);        // Tconf
             /*########################################################################*/
 
             process_sample(parameters);   // compute (reweighted) time average and stores results for later print-out.
@@ -145,7 +156,7 @@ inline void measurements:: mpi_reduction(MPI_Comm& comm, const int& rank, const 
 
 inline void measurements:: process_sample(const params& parameters){
 
-    if (parameters.method_type==0){   // constant step size scheme, eg. BAOAB.
+    if (method_type==0){   // constant step size scheme, eg. BAOAB.
 
         for (int i=0; i<no_observables; ++i) observable_sums[i] += observables[i];  // add to sum for time average
 
@@ -158,7 +169,7 @@ inline void measurements:: process_sample(const params& parameters){
         }          
     }
 
-    else if (parameters.method_type==1){   // adaptive step size scheme.
+    else if (method_type==1){   // adaptive step size scheme.
 
         for (int i=0; i<no_observables; ++i) observable_sums[i] += observables[i] * parameters.dt;  // reweighting
         dt_sum += parameters.dt;

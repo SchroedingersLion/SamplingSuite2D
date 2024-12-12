@@ -31,8 +31,8 @@ All sections the user is encouraged to modify for these aims, in this file as we
 */
 
 
-#include "SamAdams_toymodels.h"   // specifies force function as well as which obervables to take
-
+#include "simulation.h"   // specifies force function as well as which obervables to take
+#include "measurement.h"
 
 
 
@@ -44,26 +44,31 @@ int main(int argc, char *argv[]){
     if (parse_result.count("help")) {std:: cout << options.help() << std:: endl; return 0;}
     ParsedValues vals = processParsedValues(parse_result);
 
-    // Set up simulation.
-    IPS_model sys(vals.N_particles, vals.boxlength, vals.forcefield);
-
-    simulation simu(sys, 
+    // Set up measurement object.
+    bool method_type = vals.sampler=="ZBAOABZ" ? 1 : 0;
+    results = measurements(method_type, vals.burnin, vals.t_meas, vals.n_dist, vals.max_iter);
+    
+    // Set up simulation object.
+    simulation simu(vals.sampler, 
                     vals.stepsize, 
-                    vals.beta, 
-                    vals.gamma, 
-                    vals.N_iter,
-                    vals.N_meas, 
-                    vals.threads, 
-                    vals.integrator, 
-                    vals.init_mode, 
-                    vals.seed,
-                    vals.trajectory);
-
+                    vals.temperature, 
+                    vals.friction, 
+                    vals.alpha1, 
+                    vals.alpha2, 
+                    vals.N_iteration, 
+                    vals.t_meas, 
+                    vals.burnin, 
+                    vals.forcefield, 
+                    vals.init_position, 
+                    vals.init_velocity,
+                    vals.time_average,
+                    results);
+    
     // Run simulation.
-    simu.run();
+    simu.run_MPI_simulation();
 
     // Print results.
-    simu.meas.print_results(vals.output_name);
+    results.print_results(vals.output_name);
 
 
     return 0;

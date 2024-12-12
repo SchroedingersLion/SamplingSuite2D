@@ -34,7 +34,6 @@ struct coordinate{
 struct parameters{
     coordinate position, velocity, force;
     double zeta, dt;    // used only by SamAdams.
-    int method_type;    // 0 for constant-stepsize scheme, 1 for adaptive scheme.
 }
 
 
@@ -73,16 +72,9 @@ class Simulation{
 
             parameters.position = init_position;
             parameters.velocity = init_velocity;
-            parameters.method_type = sampler=="zbaoabz" ? 1 : 0;
 
-            if (sampler="baoab"){
-                parameters.method_type = 0;
-                run_sampler =  &(Simulation:: run_BAOAB);
-            }
-            else if (sampler="zbaoabz"){
-                parameters.method_type = 1;
-                run_sampler = &(Simulation:: run_ZBAOABZ);               
-            }
+            if (sampler="baoab")        run_sampler = &(Simulation:: run_BAOAB);
+            else if (sampler="zbaoabz") run_sampler = &(Simulation:: run_ZBAOABZ);               
             else throw std:: invalid_argument( "\nInvalid sampler argument! See --help.\n" );
 
 
