@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
 
     // Set up measurement object.
     bool method_type = vals.sampler=="ZBAOABZ" ? 1 : 0;
-    results = measurements(method_type, vals.burnin, vals.t_meas, vals.n_dist, vals.N_iteration);
+    results = measurements(method_type, vals.burnin, vals.t_meas, vals.n_dist, vals.time_average, vals.N_iteration);
     
     // Set up simulation object.
     simulation simu(vals.sampler, 
@@ -61,7 +61,6 @@ int main(int argc, char *argv[]){
                     vals.forcefield, 
                     vals.init_position, 
                     vals.init_velocity,
-                    vals.time_average,
                     results);
     
     // Run simulation.

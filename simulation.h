@@ -54,7 +54,6 @@ class Simulation{
                    const std:: string& forcefield, 
                    const coordinate init_position, 
                    const coordinate init_velocity,
-                   const bool time_average,
                    measurement& results)
                 :   sampler {sampler},
                     stepsize {stepsize},
@@ -66,7 +65,6 @@ class Simulation{
                     t_meas {t_meas},
                     burnin {burnin},
                     forcefield {forcefield},
-                    time_average {time_average},
                     results {results}
         {
 
@@ -107,7 +105,6 @@ class Simulation{
         const double N_iteration;
         const int t_meas;
         const int burnin;
-        const bool time_average;
         measurement& results;
         std:: mt19937 twister;
         std:: normal_distribution<> normal{0,1};

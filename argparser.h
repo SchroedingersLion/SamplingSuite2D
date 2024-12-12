@@ -38,7 +38,7 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
 
         )";
     
-    cxxopts::Options options("IPS.exe", description);
+    cxxopts::Options options("SamplingSuited2D", description);
 
     // Define command line options.
     options.add_options()

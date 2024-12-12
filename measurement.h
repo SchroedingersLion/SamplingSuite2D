@@ -20,12 +20,14 @@ class measurements {
         measurements(const int method_type, 
                      const int burnin, 
                      const int t_meas, 
-                     const int n_dist, 
+                     const int n_dist,
+                     const bool time_average, 
                      const int max_iter):
                      method_type {method_type}, 
                      burnin {burnin}, 
                      t_meas {t_meas}, 
-                     n_dist {n_dist}, 
+                     n_dist {n_dist},
+                     time_average {time_average}, 
                      max_iter {max_iter}
             {
                 
@@ -83,6 +85,7 @@ class measurements {
         std:: vector <double> zeta_raw;                 // store samples of zeta (only for adaptive schemes)                 
         int no_observables;                             // number of observables to be taken
         const int method_type;                          // 0=constant step size scheme, 1=adaptive scheme
+        const bool time_average;                        // decide whether observables will be time-averaged
         int k{0}, ctr{0}, t_avg_normalizer{0};          // help variables
         const int burnin, t_meas, n_dist, max_iter;     
         double dt_sum{0};                               
@@ -154,31 +157,52 @@ inline void measurements:: mpi_reduction(MPI_Comm& comm, const int& rank, const 
 };
 
 
-inline void measurements:: process_sample(const params& parameters){
+inline void measurements:: process_sample(const parameters& parameters){
 
-    if (method_type==0){   // constant step size scheme, eg. BAOAB.
+    if (method_type==0){   // Constant step size scheme, eg. BAOAB.
 
-        for (int i=0; i<no_observables; ++i) observable_sums[i] += observables[i];  // add to sum for time average
+        // Take care of time average.
+        if (time_average){
+            for (int i=0; i<no_observables; ++i) observable_sums[i] += observables[i];  // Add to sum for time average.
 
-        ++t_avg_normalizer;
+            ++t_avg_normalizer;
 
-        // store current moving average value for print-out, but only every n_dist steps        
-        if (ctr % n_dist == 0){                                             
-            for (int i=0; i<no_observables; ++i) observable_tavgs[i][k] = observable_sums[i] / t_avg_normalizer;
-            ++k;
+            // Store current moving average value for print-out, but only every n_dist steps.        
+            if (ctr % n_dist == 0){                                             
+                for (int i=0; i<no_observables; ++i) observable_tavgs[i][k] = observable_sums[i] / t_avg_normalizer;
+                ++k;
+            }
+        }
+        // No time average.
+        else{
+             // Store the observables for print-out without averaging.
+             if (ctr % n_dist == 0){                                             
+                for (int i=0; i<no_observables; ++i) observable_tavgs[i][k] = observables[i];
+                ++k;
+             }           
         }          
     }
 
-    else if (method_type==1){   // adaptive step size scheme.
+    else if (method_type==1){   // Adaptive step size scheme.
 
-        for (int i=0; i<no_observables; ++i) observable_sums[i] += observables[i] * parameters.dt;  // reweighting
-        dt_sum += parameters.dt;
+        if (time_average){
+            for (int i=0; i<no_observables; ++i) observable_sums[i] += observables[i] * parameters.dt;  // Reweighting.
+            dt_sum += parameters.dt;
 
-        if (ctr % n_dist == 0){                                                 
-            for (int i=0; i<no_observables; ++i) observable_tavgs[i][k] = observable_sums[i] / dt_sum;
-            dt_vals_raw[k] = parameters.dt;
-            zeta_raw[k] = parameters.zeta;
-            ++k;
+            if (ctr % n_dist == 0){                                                 
+                for (int i=0; i<no_observables; ++i) observable_tavgs[i][k] = observable_sums[i] / dt_sum;
+                dt_vals_raw[k] = parameters.dt;
+                zeta_raw[k] = parameters.zeta;
+                ++k;
+            }
+        }
+        else {
+            if (ctr % n_dist == 0){                                                 
+                for (int i=0; i<no_observables; ++i) observable_tavgs[i][k] = observables[i];
+                dt_vals_raw[k] = parameters.dt;
+                zeta_raw[k] = parameters.zeta;
+                ++k;
+            }           
         }         
     }
 
