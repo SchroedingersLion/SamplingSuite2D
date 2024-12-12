@@ -46,10 +46,10 @@ int main(int argc, char *argv[]){
 
     // Set up measurement object.
     bool method_type = vals.sampler=="ZBAOABZ" ? 1 : 0;
-    results = measurements(method_type, vals.burnin, vals.t_meas, vals.n_dist, vals.time_average, vals.N_iteration);
+    Measurement results = Measurement(method_type, vals.burnin, vals.t_meas, vals.n_dist, vals.time_average, vals.N_iteration);
     
     // Set up simulation object.
-    simulation simu(vals.sampler, 
+    Simulation simu(vals.sampler, 
                     vals.stepsize, 
                     vals.temperature, 
                     vals.friction, 
@@ -59,85 +59,20 @@ int main(int argc, char *argv[]){
                     vals.t_meas, 
                     vals.burnin, 
                     vals.forcefield, 
-                    vals.init_position, 
-                    vals.init_velocity,
+                   {vals.init_position[0],vals.init_position[1]}, 
+                   {vals.init_velocity[0],vals.init_velocity[1]},
                     results);
     
     // Run simulation.
-    simu.run_MPI_simulation();
+    simu.run_MPI_simulation(argc, argv);
 
     // Print results.
-    results.print_results(vals.output_name);
+    results.print_to_csv(vals.output_name);
 
 
     return 0;
 
 }
-
-
-// MAIN FUNCTION
-int main (int argc, char *argv[]){
-
-    // input arguments
-
-
-
-    // ############ PARAMETERS TO SET ################################
-
-    const double T = 1;         // temperature
-
-    // parameters for Adam samplers (if used)
-    const double r = 0.25;
-    const double m = 0.1;
-    const double M = 10;
-
-    int max_iter = 5e7;     // iteration number
-
-    const int burnin = 0;   // discard first burnin samples
-    const int t_meas = 2;   // take observable sample and add it to moving average any t_meas iterations
-    const int n_dist = 250; // store and print any n_dist taken sample
-
-    // initial conditions
-    const params params_init{-0.6, 1.4, 0, 0};  // {pos x, pos y, vel x, vel y}
-
-    // #################################################################
-
-
-    // measurement object the samplers will operate on
-    const int method_type {method==0 ? 0 : 1};
-    measurements results(method_type, burnin, t_meas, n_dist, max_iter);
-
-    // output file name
-    std:: string outputfile;
-    if (method == 0)        outputfile = std::string("BAOAB_dtau")+argv[2]+ "_gam" + argv[3] + ".csv";
-    else if (method == 1)   outputfile = std::string("ZBAOABZ_dtau")+argv[2]+ "_gam" + argv[3] + "_alpha" + argv[4] + ".csv";
-
-    // INIT MPI
-    MPI_Init(&argc, &argv);				
-    MPI_Comm comm = MPI_COMM_WORLD;
-    int rank, nr_proc;
-    MPI_Comm_rank(comm, &rank);
-    MPI_Comm_size(comm, &nr_proc);
-
-    const int seed = rank;
-
-    // RUN SAMPLER
-    if (method == 0)      BAOAB(results, T, gamma, dtau, max_iter, burnin, t_meas, n_dist, seed, params_init);
-    else if (method == 1) ZBAOABZ(results, T, gamma, dtau, r, alpha, m, M, max_iter, burnin, t_meas, n_dist, seed, params_init);
-    else                  throw std::invalid_argument( "received unassigned method number." );
-
-    // MPI AVERAGE
-    results.mpi_reduction(comm, rank, nr_proc);
-
-    // PRINT TO FILE
-    if( rank==0 ) results.print_to_csv(outputfile);        
-
-
-    MPI_Finalize();
-    return 0;
-
-}
-
 
 
 

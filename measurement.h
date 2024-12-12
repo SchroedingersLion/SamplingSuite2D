@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 #include <mpi.h>
 #include "parameters.h"
 
@@ -14,12 +15,12 @@
     b) in the function "take_measurement" the user has to adjust the formulas used to compute an observable from 
        the parameters. */
 
-class measurements {
+class Measurement {
 
     public:
 
         // constructor
-        measurements(const int method_type, 
+        Measurement (const int method_type, 
                      const int burnin, 
                      const int t_meas, 
                      const int n_dist,
@@ -99,7 +100,7 @@ class measurements {
 
 // implementation of measurement class routines that the user does not need to modify.
 
-inline void measurements:: print_to_csv(const std:: string outputname){
+inline void Measurement:: print_to_csv(const std:: string outputname){
     
     std:: ofstream file{outputname};
     std:: cout << "Writing to file...\n";
@@ -133,7 +134,7 @@ inline void measurements:: print_to_csv(const std:: string outputname){
 }
 
 
-inline void measurements:: mpi_reduction(MPI_Comm& comm, const int& rank, const int& nr_proc){   // MPI AVERAGE ROUTINE
+inline void Measurement:: mpi_reduction(MPI_Comm& comm, const int& rank, const int& nr_proc){   // MPI AVERAGE ROUTINE
     
     // resize output array to store averaged results in
     observable_printout.resize(no_observables);
@@ -159,7 +160,7 @@ inline void measurements:: mpi_reduction(MPI_Comm& comm, const int& rank, const 
 };
 
 
-inline void measurements:: process_sample(const parameters& parameters){
+inline void Measurement:: process_sample(const parameters& parameters){
 
     if (method_type==0){   // Constant step size scheme, eg. BAOAB.
 

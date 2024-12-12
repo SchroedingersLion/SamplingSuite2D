@@ -72,6 +72,7 @@ struct ParsedValues{
     double friction;
     double alpha1;
     double alpha2;
+    std:: string forcefield;
     std:: vector <double> init_position;
     std:: vector <double> init_velocity;
     int N_iteration;
@@ -91,10 +92,11 @@ ParsedValues processParsedValues(const cxxopts:: ParseResult& result) {
 
     values.sampler       = result.count("sampler")       ? result["sampler"].as<std:: string>()              : _sampler_default;
     values.stepsize      = result.count("stepsize")      ? result["stepsize"].as<double>()                   : std:: stod(_stepsize_default);
-    values.stepsize      = result.count("temperature")   ? result["temperature"].as<double>()                : std:: stod(_temperature_default);
-    values.stepsize      = result.count("friction")      ? result["friction"].as<double>()                   : std:: stod(_friction_default);
-    values.stepsize      = result.count("alpha1")        ? result["alpha1"].as<double>()                     : std:: stod(_alpha1_default);
-    values.stepsize      = result.count("alpha2")        ? result["alpha2"].as<double>()                     : std:: stod(_alpha2_default);
+    values.temperature   = result.count("temperature")   ? result["temperature"].as<double>()                : std:: stod(_temperature_default);
+    values.friction      = result.count("friction")      ? result["friction"].as<double>()                   : std:: stod(_friction_default);
+    values.alpha1        = result.count("alpha1")        ? result["alpha1"].as<double>()                     : std:: stod(_alpha1_default);
+    values.alpha2        = result.count("alpha2")        ? result["alpha2"].as<double>()                     : std:: stod(_alpha2_default);
+    values.forcefield    = result.count("forcefield")    ? result["forcefield"].as<std:: string>()           : _forcefield_default;
     values.init_position = result.count("init_position") ? result["init_position"].as<std::vector<double>>() : std:: vector<double> {0,0};
     values.init_velocity = result.count("init_velocity") ? result["init_velocity"].as<std::vector<double>>() : std:: vector<double> {0,0};
     values.N_iteration   = result.count("N_iteration")   ? result.count("N_iteration")                       : std:: stoi(_N_iteration_default);

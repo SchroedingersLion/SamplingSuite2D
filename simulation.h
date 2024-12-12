@@ -27,7 +27,7 @@ Do not change anything else unless you know what you're doing.
 #include <fstream>
 #include <mpi.h>
 #include "parameters.h"
-
+// #include "measurement.h"
 
 
 class Simulation{
@@ -46,7 +46,7 @@ class Simulation{
                    const std:: string& forcefield, 
                    const coordinate init_position, 
                    const coordinate init_velocity,
-                   measurement& results)
+                   Measurement& results)
                 :   sampler {sampler},
                     stepsize {stepsize},
                     temperature {temperature},
@@ -60,25 +60,17 @@ class Simulation{
                     results {results}
         {
 
-            parameters.position = init_position;
-            parameters.velocity = init_velocity;
+            params.position = init_position;
+            params.velocity = init_velocity;
 
-            if (sampler="baoab")        run_sampler = &(Simulation:: run_BAOAB);
-            else if (sampler="zbaoabz") run_sampler = &(Simulation:: run_ZBAOABZ);               
+            if (sampler == "baoab")        run_sampler = &Simulation:: run_BAOAB;
+            else if (sampler == "zbaoabz") run_sampler = &Simulation:: run_ZBAOABZ;               
             else throw std:: invalid_argument( "\nInvalid sampler argument! See --help.\n" );
 
 
             // Specify 2D problem to sample:
-            switch (forcefield){
-                
-                case "MullerBrown":
-                    compute_force = &(Simulation:: compute_force_MullerBrown);
-                    break;
-                
-                default:
-                  throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
-                  break;
-            } 
+            if (forcefield == "mullerbrown") compute_force = &Simulation:: compute_force_MullerBrown;
+            else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
             
 
         }
@@ -90,14 +82,18 @@ class Simulation{
 
     private:
 
-        parameters parameters;
+        parameters params;
+        const std:: string sampler;
         const double stepsize;
         const double friction;
         const double temperature;
-        const double N_iteration;
+        const double alpha1;
+        const double alpha2;
+        const std:: string forcefield;
+        const int N_iteration;
         const int t_meas;
         const int burnin;
-        measurement& results;
+        Measurement& results;
         std:: mt19937 twister;
         std:: normal_distribution<> normal{0,1};
         void (Simulation::* run_sampler)();
@@ -134,7 +130,7 @@ inline void Simulation:: run_MPI_simulation(int argc, char *argv[]){
 
 
     // Run sampler
-    run_sampler();
+    (this->*run_sampler)();
 
     results.mpi_reduction(comm, rank, nr_proc);
 
@@ -147,31 +143,31 @@ inline void Simulation:: run_MPI_simulation(int argc, char *argv[]){
 
 
 inline void Simulation:: A_step(const double step_size){
-    parameters.position.x += step_size * parameters.velocity.x;
-    parameters.position.y += step_size * parameters.velocity.y;
+    params.position.x += step_size * params.velocity.x;
+    params.position.y += step_size * params.velocity.y;
 }
 
 inline void Simulation:: B_step(const double step_size){
-    parameters.velocity.x += step_size * parameters.force.x;
-    parameters.velocity.y += step_size * parameters.force.y;
+    params.velocity.x += step_size * params.force.x;
+    params.velocity.y += step_size * params.force.y;
 }
 
 
 inline void Simulation:: O_step(const double a_const1, const double a_const2){
-    parameters.velocity.x  =  a_const1 * parameters.velocity.x  +  a_const2 * normal(RNG);
-    parameters.velocity.y  =  a_const1 * parameters.velocity.y  +  a_const2 * normal(RNG);
+    params.velocity.x  =  a_const1 * params.velocity.x  +  a_const2 * normal(twister);
+    params.velocity.y  =  a_const1 * params.velocity.y  +  a_const2 * normal(twister);
 }
 
 
 inline void Simulation:: Z_step(const double alpha_frac, const double exptau){
-    double force_norm_sq {parameters.force.x * parameters.force.x  +  parameters.force.y * parameters.force.y};
-    parameters.zeta = exptau * parameters.zeta  +  alpha_frac * (1-exptau) * force_norm_sq;
+    double force_norm_sq {params.force.x * params.force.x  +  params.force.y * params.force.y};
+    params.zeta = exptau * params.zeta  +  alpha_frac * (1-exptau) * force_norm_sq;
 }
 
 const double M{10}, m{0.1}, r{0.25}; // leave them here for convenience.
 inline void Simulation:: Sundman_transform(const double stepsize){
-    double zeta_r = pow(parameters.zeta, r); 
-    parameters.dt = stepsize  *  m * (zeta_r + M) / (zeta_r + m);    
+    double zeta_r = pow(params.zeta, r); 
+    params.dt = stepsize  *  m * (zeta_r + M) / (zeta_r + m);    
 }
 
 
@@ -186,16 +182,16 @@ inline void Simulation:: run_BAOAB(){
     const double stepsize_half = 0.5*stepsize;   
 
     // COMPUTE INITIAL FORCES
-    compute_force();
+    (this->*compute_force)();
 
     auto t1 = std:: chrono::high_resolution_clock::now();
     std::cout<<"starting main loop"<<std::endl;
 
     // MAIN LOOP.
-    for ( size_t i = 0;  i < N_iterations;  ++i ) {
+    for ( size_t i = 0;  i < N_iteration;  ++i ) {
 
         // TAKE MEASUREMENT
-        if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(parameters);
+        if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(params);
 
         B_step(stepsize_half);         
 
@@ -205,7 +201,7 @@ inline void Simulation:: run_BAOAB(){
 
         A_step(stepsize_half);
 
-        compute_force();
+        (this->*compute_force)();
 
         B_step(stepsize_half);
   
@@ -240,15 +236,15 @@ inline void Simulation:: run_ZBAOABZ(){
     double force_norm_sq;
 
     // COMPUTE INITIAL FORCES
-    compute_force();
+    (this->*compute_force)();
 
     // INIT ZETA
-    force_norm_sq = parameters.force.x*parameters.force.x + parameters.force.y*parameters.force.y;
-    parameters.zeta = force_norm_sq; 
+    force_norm_sq = params.force.x*params.force.x + params.force.y*params.force.y;
+    params.zeta = force_norm_sq; 
 
     // OBTAIN FIRST ADAPTIVE STEP SIZE
     Sundman_transform(stepsize);
-    dt_half = 0.5*parameters.dt;
+    dt_half = 0.5*params.dt;
 
     auto t1 = std:: chrono::high_resolution_clock::now();
     std::cout<<"starting main loop"<<std::endl;
@@ -257,24 +253,24 @@ inline void Simulation:: run_ZBAOABZ(){
     for ( size_t i = 0;  i < N_iteration;  ++i ) {
         
         // TAKE MEASUREMENT
-        if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(parameters);
+        if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(params);
 
         Z_step(alpha_frac, exptau_half);
 
         Sundman_transform(stepsize);    // update step size
-        dt_half = 0.5*parameters.dt;
+        dt_half = 0.5*params.dt;
 
         B_step(dt_half);
 
         A_step(dt_half);
 
-        a = pow(e_min_gamma, parameters.dt);       // update constants for O-step with new dt
-        sqrt_Ta_sq = sqrt((1-a*a)*T);
+        a = pow(e_min_gamma, params.dt);       // update constants for O-step with new dt
+        sqrt_Ta_sq = sqrt((1-a*a)*temperature);
         O_step(a, sqrt_Ta_sq);
 
         A_step(dt_half);
 
-        compute_force();
+        (this->*compute_force)();
 
         B_step(dt_half);
   
@@ -310,17 +306,17 @@ double MullerBrown_xdiff, MullerBrown_ydiff, MullerBrown_exponent;
 
 inline void Simulation:: compute_force_MullerBrown(){
 
-    parameters.force.x = parameters.force.y = 0;  // Reset forces.
+    params.force.x = params.force.y = 0;  // Reset forces.
 
     for (int i=0; i<4; ++i){
-        MullerBrown_xdiff = parameters.position.x - MullerBrown_x[i];
-        MullerBrown_ydiff = parameters.position.y - MullerBrown_y[i];
+        MullerBrown_xdiff = params.position.x - MullerBrown_x[i];
+        MullerBrown_ydiff = params.position.y - MullerBrown_y[i];
         MullerBrown_exponent =   MullerBrown_a[i]*MullerBrown_xdiff*MullerBrown_xdiff 
                                + MullerBrown_b[i]*MullerBrown_xdiff*MullerBrown_ydiff 
                                + MullerBrown_c[i]*MullerBrown_ydiff*MullerBrown_ydiff;
 
-        parameters.force.x -= MullerBrown_A[i]*exp( MullerBrown_exponent ) * (2*MullerBrown_a[i]*MullerBrown_xdiff + MullerBrown_b[i]*MullerBrown_ydiff);
-        parameters.force.y -= MullerBrown_A[i]*exp( MullerBrown_exponent ) * (2*MullerBrown_c[i]*MullerBrown_ydiff + MullerBrown_b[i]*MullerBrown_xdiff);
+        params.force.x -= MullerBrown_A[i]*exp( MullerBrown_exponent ) * (2*MullerBrown_a[i]*MullerBrown_xdiff + MullerBrown_b[i]*MullerBrown_ydiff);
+        params.force.y -= MullerBrown_A[i]*exp( MullerBrown_exponent ) * (2*MullerBrown_c[i]*MullerBrown_ydiff + MullerBrown_b[i]*MullerBrown_xdiff);
     }
 
 }
