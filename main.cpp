@@ -43,9 +43,16 @@ int main(int argc, char *argv[]){
     auto [parse_result, options] = parseCommandLine(argc, argv); // Parse command line.
     if (parse_result.count("help")) {std:: cout << options.help() << std:: endl; return 0;}
     ParsedValues vals = processParsedValues(parse_result);
+    
     // Set up measurement object.
     bool method_type = vals.sampler=="ZBAOABZ" ? 1 : 0;
-    Measurement results = Measurement(method_type, vals.burnin, vals.t_meas, vals.n_dist, vals.time_average, vals.N_iteration);
+    Measurement results = Measurement(method_type, 
+                                      vals.burnin, 
+                                      vals.t_meas, 
+                                      vals.n_dist, 
+                                      vals.time_average, 
+                                      vals.N_iteration, 
+                                      vals.output_name);
     
 
     // Set up simulation object.
@@ -65,9 +72,6 @@ int main(int argc, char *argv[]){
     
     // Run simulation.
     simu.run_MPI_simulation(argc, argv);
-
-    // Print results.
-    results.print_to_csv(vals.output_name);
 
 
     return 0;

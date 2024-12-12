@@ -25,13 +25,15 @@ class Measurement {
                      const int t_meas, 
                      const int n_dist,
                      const bool time_average, 
-                     const int max_iter):
+                     const int N_iteration,
+                     const std:: string output_name):
                      method_type {method_type}, 
                      burnin {burnin}, 
                      t_meas {t_meas}, 
                      n_dist {n_dist},
                      time_average {time_average}, 
-                     max_iter {max_iter}
+                     N_iteration {N_iteration},
+                     output_name {output_name}
             {
                 
                 /*######## ENTER THE NUMBER OF OBSERVABLES TO COLLECT ############*/
@@ -42,7 +44,7 @@ class Measurement {
                 observables.resize(no_observables);
                 observable_sums.resize(no_observables);
 
-                int no_elements {(max_iter-burnin) / (n_dist*t_meas)}; // Number of elements needed in the t-averaged results vector.
+                int no_elements {(N_iteration-burnin) / (n_dist*t_meas)}; // Number of elements needed in the t-averaged results vector.
                 if (no_elements<0) throw std:: invalid_argument( "\n Combination of N_iteration, burnin, n_dist, and t_meas makes no sense. Is N_iter < burnin? \n" );
 
                 observable_tavgs = std:: vector <std:: vector <float>> (no_observables, std::vector <float> (no_elements));
@@ -77,7 +79,7 @@ class Measurement {
 
 
         void mpi_reduction(MPI_Comm& comm, const int& rank, const int& nr_proc);  // for mpi average, implemented in .cpp file.
-        void print_to_csv(const std:: string outputname);                         // for print out, implemented in .cpp file.
+        void print_to_csv();                         // for print out, implemented in .cpp file.
 
 
     private:
@@ -91,8 +93,9 @@ class Measurement {
         const int method_type;                          // 0=constant step size scheme, 1=adaptive scheme
         const bool time_average;                        // decide whether observables will be time-averaged
         int k{0}, ctr{0}, t_avg_normalizer{0};          // help variables
-        const int burnin, t_meas, n_dist, max_iter;     
-        double dt_sum{0};                               
+        const int burnin, t_meas, n_dist, N_iteration;     
+        double dt_sum{0}; 
+        const std:: string output_name;                              
         void process_sample(const parameters& parameters);   // add new sample to time average and store result, implemented in .cpp file.
 
 };
@@ -101,9 +104,9 @@ class Measurement {
 
 // implementation of measurement class routines that the user does not need to modify.
 
-inline void Measurement:: print_to_csv(const std:: string outputname){
+inline void Measurement:: print_to_csv(){
     
-    std:: ofstream file{outputname};
+    std:: ofstream file{output_name};
     std:: cout << "Writing to file...\n";
 
     // annoying logic to obtain first iteration index at which observable will be printed to file 

@@ -134,6 +134,9 @@ inline void Simulation:: run_MPI_simulation(int argc, char *argv[]){
 
     results.mpi_reduction(comm, rank, nr_proc);
 
+    // Print results.
+    if (rank==0) results.print_to_csv();
+
     MPI_Finalize();
 
 };
