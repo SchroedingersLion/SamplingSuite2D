@@ -26,21 +26,13 @@ Do not change anything else unless you know what you're doing.
 #include <iterator>
 #include <fstream>
 #include <mpi.h>
+#include "parameters.h"
 
-struct coordinate{
-    double x{0}, y{0};
-}
-
-struct parameters{
-    coordinate position, velocity, force;
-    double zeta, dt;    // used only by SamAdams.
-}
 
 
 class Simulation{
 
     public:
-
 
         Simulation(const std:: string& sampler,
                    const double stepsize,

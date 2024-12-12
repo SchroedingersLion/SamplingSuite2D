@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <mpi.h>
+#include "parameters.h"
+
 
 /*  This is the measurement class that is used by the samplers to obtain observables. 
     In order to modify what observables are collected, the user has to do 2 things:

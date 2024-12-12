@@ -30,10 +30,10 @@ All sections the user is encouraged to modify for these aims, in this file as we
 
 */
 
-
-#include "simulation.h"   // specifies force function as well as which obervables to take
+#include "parameters.h"
 #include "measurement.h"
-
+#include "simulation.h"   // specifies force function as well as which obervables to take
+#include "argparser.h"
 
 
 
