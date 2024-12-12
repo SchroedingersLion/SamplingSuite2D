@@ -43,7 +43,7 @@ class Measurement {
                 observable_sums.resize(no_observables);
 
                 int no_elements {(max_iter-burnin) / (n_dist*t_meas)}; // Number of elements needed in the t-averaged results vector.
-                
+
                 observable_tavgs = std:: vector <std:: vector <float>> (no_observables, std::vector <float> (no_elements));
 
                 // the adaptive schemes also collect the adaptive step sizes.
