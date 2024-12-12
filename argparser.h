@@ -27,12 +27,13 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
     
     std::string description = R"(
         To run a simulation run "mpirun -n N SamplingSuite2D" and add the flags below to control the settings. N denotes the number of mpi processes.
+        
         The program will print a .csv file containing time series data of the observables specified in measurement.h.
 
         To run multiple trajectories, run the code with multiple mpi processes. The output file will contain the inter-trajectory averages.
         To also time-average the measurements, pass the corresponding flag (see below).
 
-        The first column in the output file will always contain time. The next columns hold the observables. In case of ZBAOABZ, the last two columns
+        The first column in the output file will always contain iteration count. The next columns hold the observables. In case of ZBAOABZ, the last two columns
         will hold values of \zeta and the adaptive stepsize dt. These two columns will NEVER be averaged. In case of multiple trajectories, the values in 
         these columns stem from the first trajectory.
 
