@@ -100,11 +100,11 @@ ParsedValues processParsedValues(const cxxopts:: ParseResult& result) {
     values.forcefield    = result.count("forcefield")    ? result["forcefield"].as<std:: string>()           : _forcefield_default;
     values.init_position = result.count("init_position") ? result["init_position"].as<std::vector<double>>() : std:: vector<double> {0,0};
     values.init_velocity = result.count("init_velocity") ? result["init_velocity"].as<std::vector<double>>() : std:: vector<double> {0,0};
-    values.N_iteration   = result.count("N_iteration")   ? result.count("N_iteration")                       : std:: stoi(_N_iteration_default);
-    values.t_meas        = result.count("t_meas")        ? result.count("t_meas")                            : std:: stoi(_t_meas_default);
-    values.n_dist        = result.count("n_dist")        ? result.count("n_dist")                            : std:: stoi(_n_dist_default);
-    values.burnin        = result.count("burnin")        ? result.count("burnin")                            : std:: stoi(_burnin_default);
-    values.seed          = result.count("seed")          ? result.count("seed")                              : std:: stoi(_seed_default);
+    values.N_iteration   = result.count("N_iteration")   ? result["N_iteration"].as<int>()                   : std:: stoi(_N_iteration_default);
+    values.t_meas        = result.count("t_meas")        ? result["t_meas"].as<int>()                        : std:: stoi(_t_meas_default);
+    values.n_dist        = result.count("n_dist")        ? result["n_dist"].as<int>()                        : std:: stoi(_n_dist_default);
+    values.burnin        = result.count("burnin")        ? result["burnin"].as<int>()                        : std:: stoi(_burnin_default);
+    values.seed          = result.count("seed")          ? result["seed"].as<int>()                          : std:: stoi(_seed_default);
     values.output_name   = result.count("output_name")   ? result["output_name"].as<std::string>()           : _output_name_default;
     values.time_average  = result.count("time_average");
 
