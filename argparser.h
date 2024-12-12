@@ -17,7 +17,7 @@ const std:: string  _init_position_default {"0,0"};
 const std:: string  _init_velocity_default {"0,0"};
 const std:: string  _N_iteration_default{"10000"};
 const std:: string  _t_meas_default {"10"};
-const std:: string  _n_dist_default {"10"};
+const std:: string  _n_dist_default {"1"};
 const std:: string  _burnin_default {"0"};
 const std:: string  _seed_default {"1"};
 const std:: string  _output_name_default {"results.csv"};
