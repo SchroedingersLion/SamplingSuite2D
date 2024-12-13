@@ -66,7 +66,7 @@ Currently, the following potentials are implemented: Muller-Brown (`--forcefield
 
 ### How to add new potentials
 It is straightforward to add new 2D potentials to the codebase.
-To see how it is done, open the `simulation.h` file and scroll down to the definitions of the force functions, e.g., `inline void Simulation:: compute_force_ackley()` for the ackley force:
+To see how it is done, open the `simulation.h` file and scroll down to the definitions of the force functions, e.g., `inline void Simulation:: compute_force_ackley()` for the Ackley force:
 ```c++
 // Ackley
 const double Ackley_2pi {2*M_PI};
@@ -147,7 +147,7 @@ Currently, 4 observables are stored: The $x$-coordinate, the $y$-coordinate, the
 In case the sampler used is ZBAOABZ, it will automatically collect the adaptive stepsize `dt` and the $\zeta$ variable and print them as the last two columns of the output file. Even if averaging is activated, these two variables will **never** be averaged. In case of multiple trajectories, they will correspond to the first trajectory.
 
 ### Change observables to collect
-To change the collected observables or add new ones, we need to modify the `take_measurement` routine of the `Measurement` class.
+To change the collected observables or add new ones, we need to modify the `take_measurement` routine of the `Measurement` class in the `measurement.h` file.
 ```c++
         void take_measurement(const parameters& parameters){
 
