@@ -127,7 +127,7 @@ In the constructor of the `Simulation` class, we need to add a line to the case 
 
 ```
 
-Save the file changes and open the `argparser.h` in order to modify the `--help` message so that it accurately informs the user of the forcefields available:
+Save the file changes and open the file `argparser.h` in order to modify the `--help` message so that it accurately informs the user of the forcefields available:
 ```c++
     // Define command line options.
     options.add_options()
