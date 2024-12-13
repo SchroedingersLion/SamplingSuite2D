@@ -45,7 +45,7 @@ Full list of options:
 | --output_name arg | string | Name of the printed output file.|
 | --time_average | bool | If passed, trajectories will be time-averaged (see below).|
 
-Note that all options are obtional and have default values. Run `./SamplingSuite2D --help` for more information.
+Note that all options are optional and have default values. Run `./SamplingSuite2D --help` for more information.
 
 Note that the user is responsible for chossing admissible initial conditions (e.g., don't start in a forcefield singularity) and pick meaningful hyperparameters (e.g., don't use negative temperatures). 
 
