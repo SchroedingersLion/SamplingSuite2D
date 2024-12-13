@@ -136,7 +136,7 @@ Save the file changes and open the file `argparser.h` in order to modify the `--
         // code.
 ```
 Add the name of the new forcefield to the string  
-`c++"Forcefield. Allowed values 'mullerbrown', 'ackley', 'rosenbrock' or 'beale'."`.
+```c++"Forcefield. Allowed values 'mullerbrown', 'ackley', 'rosenbrock' or 'beale'."```.
 Note that the spelling needs to be identical to the one you used in the `else if` statement in the constructor before. Save the file and recompile the code.
 
 ## Observables
