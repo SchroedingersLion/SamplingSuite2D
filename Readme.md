@@ -17,11 +17,13 @@ via `mpicxx -O3 -o SamplingSuite2D main.cpp`.
 If you see an error that the file `cxxopts.hpp` has not been found, download it from  
 https://github.com/jarro2783/cxxopts/tree/master/include and store in your system's include folder (on Linux, this is typically /usr/include). 
 
-Succesful compilation creates the executable named `SamplingSuite2D`.
+Successful compilation creates the executable `SamplingSuite2D`.
 
 ## Run
 To run the simulation use `mpirun -n <num_processes> SamplingSuite2D [OPTIONS]` where `<num_processes>` should be replaced with the number of processes desired.
-Each process will run an independent trajectory. The options are specified via `--option_name option_value`, e.g., `--stepsize 0.01`.  
+Each process will run an independent trajectory. The options are specified via 
+```--option_name option_value```, 
+e.g., `--stepsize 0.01`.  
 Full list of options:  
 
 | Flag           | Type       | Description      |
