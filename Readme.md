@@ -91,7 +91,7 @@ inline void Simulation:: compute_force_Ackley(){
 
 ```
 The variables defined before the force function definition are global and can be accessed from within the function body. They are help-variables to make computations in the force function more efficient. Their name should always start with the name of the potential, in this case `Ackley_`.
-The name of the new force function is `compute_force_Ackley`. These naming pattern should be kept for any added force function.  
+The name of the new force function is `compute_force_Ackley`. These naming patterns should be kept for any added force function.  
 In the function body, we have access to the `params` object, which holds the positions, velocities, and force fields (their `x` and `y` coordinates) of the current simulation state.  
 The `params.force.x` and `params.force.y` fields need to be updated with the forces, i.e. with the components of $-\nabla U(x,y)$ where $U$ is the 2D potential.
 
@@ -155,7 +155,7 @@ To change the collected observables or add new ones, we need to modify the `take
                The number of entries in vector "observables" must correspond to member variable "no_observables" set by the user
                in the constructor above. The reweighting for the adaptive schemes is done automatically by the "process_sample" routine. 
                The adaptive schemes will also automatically store the adaptive step size and the \zeta variable. */            
-            observables[0] = parameters.position.x;	// x-coordinate
+            observables[0] = parameters.position.x;	 // x-coordinate
             observables[1] = parameters.position.y;  // y-coordinate
             observables[2] = 0.5*(parameters.velocity.x*parameters.velocity.x + parameters.velocity.y*parameters.velocity.y);   // Tkin
             observables[3] = -0.5*(parameters.position.x*parameters.force.x + parameters.position.y*parameters.force.y);        // Tconf
@@ -176,7 +176,7 @@ To change the collected observables or add new ones, we need to modify the `take
 ```
 The `observables` vector can be filled with functions of the current simulation state given by the `parameters` object. If we want to add a new observable, for example the distance of the position to the origin, $\sqrt{x^2+y^2}$, we just need to add an additional line specifying that new observable:
 ```c++
-            observables[0] = parameters.position.x;	// x-coordinate
+            observables[0] = parameters.position.x;	 // x-coordinate
             observables[1] = parameters.position.y;  // y-coordinate
             observables[2] = 0.5*(parameters.velocity.x*parameters.velocity.x + parameters.velocity.y*parameters.velocity.y);   // Tkin
             observables[3] = -0.5*(parameters.position.x*parameters.force.x + parameters.position.y*parameters.force.y);        // Tconf
