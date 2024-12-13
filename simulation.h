@@ -69,9 +69,10 @@ class Simulation{
 
 
             // Specify 2D problem to sample:
-            if (forcefield == "mullerbrown") compute_force      = &Simulation:: compute_force_MullerBrown;
-            else if (forcefield == "ackley") compute_force      = &Simulation:: compute_force_Ackley;
-            else if (forcefield == "rosenbrock") compute_force  = &Simulation:: compute_force_Rosenbrock;
+            if (forcefield == "mullerbrown")     compute_force = &Simulation:: compute_force_MullerBrown;
+            else if (forcefield == "ackley")     compute_force = &Simulation:: compute_force_Ackley;
+            else if (forcefield == "rosenbrock") compute_force = &Simulation:: compute_force_Rosenbrock;
+            else if (forcefield == "beale")      compute_force = &Simulation:: compute_force_Beale;
             else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
             
 
@@ -110,6 +111,7 @@ class Simulation{
         void compute_force_MullerBrown();
         void compute_force_Ackley();
         void compute_force_Rosenbrock();
+        void compute_force_Beale();
 
 };
 
@@ -358,5 +360,23 @@ inline void Simulation:: compute_force_Rosenbrock(){
                      + 2*(1-params.position.x);
     
     params.force.y = -200*(params.position.y - params.position.x*params.position.x);
+
+}
+
+
+
+// Beale
+double Beale_var1, Beale_var2, Beale_var3;
+double y_sq;
+
+inline void Simulation:: compute_force_Beale(){
+
+    y_sq = params.position.y*params.position.y;
+    Beale_var1 = 2*(1.5   - params.position.x + params.position.x*params.position.y);
+    Beale_var2 = 2*(2.25  - params.position.x + params.position.x*y_sq);
+    Beale_var3 = 2*(2.625 - params.position.x + params.position.x*y_sq*params.position.y);
+
+    params.force.x = -Beale_var1*(-1+params.position.y) - Beale_var2*(-1+y_sq) - Beale_var3*(-1+y_sq*params.position.y);
+    params.force.y = -params.position.x * (Beale_var1 + 2*params.position.y*Beale_var2 + 3*y_sq*Beale_var3);
 
 }
