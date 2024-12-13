@@ -132,9 +132,10 @@ Save the file changes and open the file `argparser.h` in order to modify the `--
     // Define command line options.
     options.add_options()
         // code.     
-    ("forcefield",      "Forcefield. Allowed values 'mullerbrown','ackley', 'rosenbrock' or 'beale'.",  cxxopts:: value <std:: string>()->default_value(_forcefield_default))    
+    ("forcefield",      "Forcefield. Allowed values 'mullerbrown', 'ackley', 'rosenbrock' or 'beale'.",  cxxopts:: value <std:: string>()->default_value(_forcefield_default))    
         // code.
 ```
+Add the name of the new forcefield to the string `"Forcefield. Allowed values 'mullerbrown', 'ackley', 'rosenbrock' or 'beale'."`.
 Note that the spelling needs to be identical to the one you used in the `else if` statement in the constructor before. Save the file and recompile the code.
 
 ## Observables
