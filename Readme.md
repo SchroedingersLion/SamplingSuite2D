@@ -30,18 +30,18 @@ Full list of options:
 |----------------|------------|------------------|
 | --sampler arg  |  string    | Sampler to use (see below).  |
 | --stepsize arg |  float > 0 | Stepsize used by sampler. |
-| --temperature arg | float>0 | Temperature used by sampler.|
-| --friction arg |  float>0   | Friction used by sampler.|
-| --alpha1 arg   |  float>0   | Alpha1 constant used only by ZBAOABZ.|
-| --alpha2 arg   |  float>0   | Alpha2 constant used only by ZBAOABZ.|
+| --temperature arg | float > 0 | Temperature used by sampler.|
+| --friction arg |  float > 0   | Friction used by sampler.|
+| --alpha1 arg   |  float > 0   | Alpha1 constant used only by ZBAOABZ.|
+| --alpha2 arg   |  float > 0   | Alpha2 constant used only by ZBAOABZ.|
 | --forcefield arg | string   | Forcefield / potential to use (see below).|
 | --init_position arg | two comma-separated floats | Initial position of the trajectories.|
 | --init_velocity arg | two comma-separated floats | Initial velocity of the trajectories.|
-| --N_iteration arg | int>0      | Number of integrator steps.|
-| --t_meas arg  | int>0 | Integrator steps between two measurements (see below).|
-| --n_meas arg  | int>0 | Print any `n_meas` taken measurements to file (see below).|
-| --burnin arg  | int>0 | Start taking measurements only after `burnin` iterations.|
-| --seed   arg  | int>0 | Randomseed to instantiate RNG.|
+| --N_iteration arg | int > 0      | Number of integrator steps.|
+| --t_meas arg  | int > 0 | Integrator steps between two measurements (see below).|
+| --n_meas arg  | int > 0 | Print any `n_meas` taken measurements to file (see below).|
+| --burnin arg  | int > 0 | Start taking measurements only after `burnin` iterations.|
+| --seed   arg  | int > 0 | Randomseed to instantiate RNG.|
 | --output_name arg | string | Name of the printed output file.|
 | --time_average | bool | If passed, trajectories will be time-averaged (see below).|
 
