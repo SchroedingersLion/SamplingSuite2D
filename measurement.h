@@ -43,6 +43,7 @@ class Measurement {
 
                 observables.resize(no_observables);
                 observable_sums.resize(no_observables);
+                col_names.resize(no_observables);
 
                 int no_elements {(N_iteration-burnin) / (n_dist*t_meas)}; // Number of elements needed in the t-averaged results vector.
                 if (no_elements<0) throw std:: invalid_argument( "\n Combination of N_iteration, burnin, n_dist, and t_meas makes no sense. Is N_iter < burnin? \n" );
@@ -61,15 +62,22 @@ class Measurement {
 
         void take_measurement(const parameters& parameters){
 
-            /* ########### COMPUTE CURRENT OBSERVABLE VALUES FROM PARAMETERS ########
+            /* ########### COMPUTE CURRENT OBSERVABLE VALUES FROM PARAMETERS #####################################
                The number of entries in vector "observables" must correspond to member variable "no_observables" set by the user
                in the constructor above. The reweighting for the adaptive schemes is done automatically by the "process_sample" routine. 
-               The adaptive schemes will also automatically store the adaptive step size. */            
+               The adaptive schemes will also automatically store the adaptive step size and the \zeta variable. */            
             observables[0] = parameters.position.x;	// x-coordinate
             observables[1] = parameters.position.y;  // y-coordinate
             observables[2] = 0.5*(parameters.velocity.x*parameters.velocity.x + parameters.velocity.y*parameters.velocity.y);   // Tkin
             observables[3] = -0.5*(parameters.position.x*parameters.force.x + parameters.position.y*parameters.force.y);        // Tconf
             /*########################################################################*/
+
+            /*################# ENTER NAMES OF OBSERVABLES (WILL BE HEADER OF OUTPUTFILE)####*/
+            col_names[0] = "x";
+            col_names[1] = "y";
+            col_names[2] = "Tkin";
+            col_names[3] = "Tconf";
+            /*################################################################################*/
 
             process_sample(parameters);   // compute (reweighted) time average and stores results for later print-out.
 
@@ -85,6 +93,7 @@ class Measurement {
     private:
         std:: vector <double> observable_sums;          // sum of observable samples for time average
         std:: vector <double> observables;              // vector storing the new sample (one entry per observable)
+        std:: vector <std:: string> col_names;          // names of the columns in the output file (names of the observables).
         std:: vector <std:: vector <float>> observable_tavgs;       // store the evolving time average for each observable
         std:: vector <std:: vector <float>> observable_printout;    // store the mpi process average of vector "observable_tavgs" on rank 0 
         std:: vector <double> dt_vals_raw;              // store samples of adaptive step size (only for adaptive schemes)
@@ -108,6 +117,13 @@ inline void Measurement:: print_to_csv(){
     
     std:: ofstream file{output_name};
     std:: cout << "Writing to file...\n";
+
+    // Write header with specified column names.
+    file << "Iteration ";
+    for (size_t k=0; k<col_names.size(); ++k){
+        file << col_names[k] << " ";
+    }
+    file << "\n";
 
     // annoying logic to obtain first iteration index at which observable will be printed to file 
     // (depends on variables burnin, t_meas, and n_dist).
