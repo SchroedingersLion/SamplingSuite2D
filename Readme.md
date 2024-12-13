@@ -47,6 +47,7 @@ Full list of options:
 
 Note that all options are obtional and have default values. Run `./SamplingSuite2D --help` for more information.
 
+Note that the user is responsible for chossing admissible initial conditions (e.g., don't start in a forcefield singularity) and pick meaningful hyperparameters (e.g., don't use negative temperatures). 
 
 ## Averaging Behavior
 There are several modes of possible averaging behaviors:
@@ -55,7 +56,7 @@ If you want to draw a single trajectory and take observable measurements along t
 ### Trajectory average
 If you want to average results over multiple independent trajectories, run the code with multiple MPI processes. The output file will then contain the inter-trajectory averages.
 ### Time average
-If you want the trajectories to be time-averaged (in terms of a moving average along the given trajectory), pass the `time_average` flag (without argument). The outout file will then contain time-averaged observables.
+If you want the trajectories to be time-averaged (in terms of a moving average along the given trajectory), pass the `time_average` flag (without argument). The output file will then contain time-averaged observables.
 The time average behavior can be fine-controlled with the `t_meas` flag. The observables will be measured any `t_meas` iterations and added to the moving average. 
 Whether the moving average will be printed to the output file at each of these time points also depends on the flag `n_dist`. Only any `n_dist` times the moving average was updated will it be printed to outpu (that way, the accuracy of the moving average can be increased without increasing the size of the output file). In case of no time averaging, `n_dist` should simply remain `1` (the default value).
 
