@@ -69,8 +69,9 @@ class Simulation{
 
 
             // Specify 2D problem to sample:
-            if (forcefield == "mullerbrown") compute_force = &Simulation:: compute_force_MullerBrown;
-            else if (forcefield == "ackley") compute_force = &Simulation:: compute_force_Ackley;
+            if (forcefield == "mullerbrown") compute_force      = &Simulation:: compute_force_MullerBrown;
+            else if (forcefield == "ackley") compute_force      = &Simulation:: compute_force_Ackley;
+            else if (forcefield == "rosenbrock") compute_force  = &Simulation:: compute_force_Rosenbrock;
             else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
             
 
@@ -108,6 +109,7 @@ class Simulation{
         void (Simulation::* compute_force)();
         void compute_force_MullerBrown();
         void compute_force_Ackley();
+        void compute_force_Rosenbrock();
 
 };
 
@@ -342,7 +344,19 @@ inline void Simulation:: compute_force_Ackley(){
     // Compute force.
     params.force.x = -2*Ackley_x*exp(-0.2*Ackley_distconst)/Ackley_distconst 
                       - M_PI*sin(Ackley_2pi*Ackley_x)*exp(0.5*(cos(Ackley_2pi*Ackley_x)+cos(Ackley_2pi*Ackley_y)));
+    
     params.force.y = -2*Ackley_y*exp(-0.2*Ackley_distconst)/Ackley_distconst 
                       - M_PI*sin(Ackley_2pi*Ackley_y)*exp(0.5*(cos(Ackley_2pi*Ackley_x)+cos(Ackley_2pi*Ackley_y)));
+
+}
+
+
+// Rosenbrock
+inline void Simulation:: compute_force_Rosenbrock(){
+
+    params.force.x = 400*params.position.x*(params.position.y - params.position.x*params.position.x)
+                     + 2*(1-params.position.x);
+    
+    params.force.y = -200*(params.position.y - params.position.x*params.position.x);
 
 }
