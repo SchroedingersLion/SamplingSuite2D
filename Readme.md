@@ -174,7 +174,7 @@ To change the collected observables or add new ones, we need to modify the `take
 
         };
 ```
-The `observables` vector can be filled with functions of the current simulation state given by the `parameters`. If we want to add a new observable, for example the distance of the position to the origin, $\sqrt{x^2+y^2}$, we just need to add an additional line specifying that new observable like this:
+The `observables` vector can be filled with functions of the current simulation state given by the `parameters` object. If we want to add a new observable, for example the distance of the position to the origin, $\sqrt{x^2+y^2}$, we just need to add an additional line specifying that new observable:
 ```c++
             observables[0] = parameters.position.x;	// x-coordinate
             observables[1] = parameters.position.y;  // y-coordinate
