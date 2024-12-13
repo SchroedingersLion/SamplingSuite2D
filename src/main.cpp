@@ -1,4 +1,4 @@
-/*
+/* THIS DESCRIPTION NEEDS TO BE UPDATED
 C++ source file to sample 2-dimensional potential energy surfaces specified by a force function.
 The available samplers are BAOAB, ZBAOABZ, and OABZBAO. 
 

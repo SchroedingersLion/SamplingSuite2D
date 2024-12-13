@@ -1,4 +1,4 @@
-/*
+/* THIS DESCRIPTION NEEDS TO BE UPDATED
 This header file specifies the 2D problem the samplers run on as well as what observables are collected.
 If you want to create a new 2D problem, you need to overwrite the force function below.
 If you want to change the observables that are collected, you need to modify the measurement class below.

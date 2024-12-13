@@ -8,7 +8,8 @@
 #include "parameters.h"
 
 
-/*  This is the measurement class that is used by the samplers to obtain observables. 
+/* THIS DESCRIPTION NEEDS TO BE UPDATED  
+This is the measurement class that is used by the samplers to obtain observables. 
     In order to modify what observables are collected, the user has to do 2 things:
     a) in the constructor, they have to specify the numbers of observables to be taken by
        adjusting the value of the variable "no_observables". 
