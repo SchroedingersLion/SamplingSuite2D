@@ -150,6 +150,13 @@ To change the collected observables or add new ones, we need to modify the `take
             observables[3] = -0.5*(parameters.position.x*parameters.force.x + parameters.position.y*parameters.force.y);        // Tconf
             /*########################################################################*/
 
+            /*################# ENTER NAMES OF OBSERVABLES (WILL BE HEADER OF OUTPUTFILE)####*/
+            col_names[0] = "x";
+            col_names[1] = "y";
+            col_names[2] = "Tkin";
+            col_names[3] = "Tconf";
+            /*################################################################################*/
+
             process_sample(parameters);   // compute (reweighted) time average and stores results for later print-out.
 
             return;
@@ -163,6 +170,16 @@ The `observables` vector can be filled with functions of the current simulation 
             observables[2] = 0.5*(parameters.velocity.x*parameters.velocity.x + parameters.velocity.y*parameters.velocity.y);   // Tkin
             observables[3] = -0.5*(parameters.position.x*parameters.force.x + parameters.position.y*parameters.force.y);        // Tconf
             observables[4] = sqrt(parameters.position.x*parameters.position.x+parameters.position.y*parameters.position.y);  // Our new observable.
+```
+We also need to add a new name for the observable:
+```c++
+            /*################# ENTER NAMES OF OBSERVABLES (WILL BE HEADER OF OUTPUTFILE)####*/
+            col_names[0] = "x";
+            col_names[1] = "y";
+            col_names[2] = "Tkin";
+            col_names[3] = "Tconf";
+            col_names[4] = "Distance to origin"; // Our new name.
+            /*################################################################################*/
 ```
 Since the `observable` vector has grown, we need to adjust its size in the class constructor above, i.e. we need to change the part
 ```c++
