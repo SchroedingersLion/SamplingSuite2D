@@ -1,7 +1,7 @@
 # SamplingSuite2D
 This repository holds the source code of the SamplingSuite2D, which aims at sampling 2-dimensional surfaces using Langevin Dynamics-based integrators in a highly efficient and extensible framework.
 
-The code can be compiled from source, executed from the command line, and run on arbitrarily many processes thanks to the mpi library.
+The code can be compiled from source, executed from the command line, and run on arbitrarily many processes thanks to the Message-Passing Interface (MPI).
 The behavior of the simulation (what problem and integrator to run, hyperparameters like stepsize and temperature, as well as the averaging behavior) 
 can be controlled via various flags (see below).
 
