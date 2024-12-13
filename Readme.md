@@ -139,7 +139,7 @@ Add the name of the new forcefield to the string
 ```c++
 "Forcefield. Allowed values 'mullerbrown', 'ackley', 'rosenbrock' or 'beale'."
 ```
-Note that the spelling needs to be identical to the one you used in the `else if` statement in the constructor before. Save the file and recompile the code.
+**Note** that the spelling needs to be identical to the one you used in the `else if` statement in the constructor before. Save the file and recompile the code.
 
 ## Observables
 The processing of observables is governed by the `measurement.h` file. Currently, 4 observables are stored: The $x$-coordinate, the $y$-coordinate, the kinetic temperature, and the configurational temperature. The resulting output file will hold time series data for these observables, the first columns holding the iteration counts. 
