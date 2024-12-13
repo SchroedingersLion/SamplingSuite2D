@@ -58,7 +58,7 @@ If you want to average results over multiple independent trajectories, run the c
 ### Time average
 If you want the trajectories to be time-averaged (in terms of a moving average along the given trajectory), pass the `time_average` flag (without argument). The output file will then contain time-averaged observables.
 The time average behavior can be fine-controlled with the `t_meas` flag. The observables will be measured any `t_meas` iterations and added to the moving average. 
-Whether the moving average will be printed to the output file at each of these time points also depends on the flag `n_dist`. Only any `n_dist` times the moving average was updated will it be printed to outpu (that way, the accuracy of the moving average can be increased without increasing the size of the output file). In case of no time averaging, `n_dist` should simply remain `1` (the default value).
+Whether the moving average will be printed to the output file at each of these time points also depends on the flag `n_dist`. Only any `n_dist` times the moving average was updated will it be printed to output (that way, the accuracy of the moving average can be increased without increasing the size of the output file). In case of no time averaging, `n_dist` should simply remain `1` (the default value).
 
 
 ## Implemented Potentials
@@ -90,8 +90,10 @@ inline void Simulation:: compute_force_Ackley(){
 }
 
 ```
-The variables defined before the force function definition are global and can be accessed from within the function body. They are help variables to make computations in the force function more efficient. Their name should always start with the name of the potential, in this case `Ackley_`.
-The name of the new force function is `compute_force_Ackley`. That naming scheme should be kept for any added force function. In the function body, we have access to the `params` object, which holds the positions, velocities, and force fields (their `x` and `y` coordinates) of the current simulation state. The `params.force.x` and `params.force.y` fields need to be updated with the forces, i.e. with the components of $-\nabla U(x,y)$ where $U$ is the 2D potential.
+The variables defined before the force function definition are global and can be accessed from within the function body. They are help-variables to make computations in the force function more efficient. Their name should always start with the name of the potential, in this case `Ackley_`.
+The name of the new force function is `compute_force_Ackley`. These naming pattern should be kept for any added force function.  
+In the function body, we have access to the `params` object, which holds the positions, velocities, and force fields (their `x` and `y` coordinates) of the current simulation state.  
+The `params.force.x` and `params.force.y` fields need to be updated with the forces, i.e. with the components of $-\nabla U(x,y)$ where $U$ is the 2D potential.
 
 Once the new force function is written, it needs to be made known to the simulation class. Scroll up to the private members of the `Simulation` class and add the name of the new force routine to the others:
 ```c++
@@ -115,13 +117,13 @@ class Simulation{
 ```
 In the constructor of the `Simulation` class, we need to add a line to the case distinction that picks the right force routine depending on the input parameters:
 ```c++
-            // Specify 2D problem to sample:
-            if (forcefield == "mullerbrown")     compute_force = &Simulation:: compute_force_MullerBrown;
-            else if (forcefield == "ackley")     compute_force = &Simulation:: compute_force_Ackley;
-            else if (forcefield == "rosenbrock") compute_force = &Simulation:: compute_force_Rosenbrock;
-            else if (forcefield == "beale")      compute_force = &Simulation:: compute_force_Beale;
-            // Add new force case here.
-            else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
+    // Specify 2D problem to sample:
+    if (forcefield == "mullerbrown")     compute_force = &Simulation:: compute_force_MullerBrown;
+    else if (forcefield == "ackley")     compute_force = &Simulation:: compute_force_Ackley;
+    else if (forcefield == "rosenbrock") compute_force = &Simulation:: compute_force_Rosenbrock;
+    else if (forcefield == "beale")      compute_force = &Simulation:: compute_force_Beale;
+    // Add new force case here.
+    else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
 
 ```
 
