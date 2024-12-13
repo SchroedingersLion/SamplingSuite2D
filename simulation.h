@@ -70,6 +70,7 @@ class Simulation{
 
             // Specify 2D problem to sample:
             if (forcefield == "mullerbrown") compute_force = &Simulation:: compute_force_MullerBrown;
+            else if (forcefield == "ackley") compute_force = &Simulation:: compute_force_Ackley;
             else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
             
 
@@ -106,6 +107,7 @@ class Simulation{
         void Sundman_transform(const double stepsize);
         void (Simulation::* compute_force)();
         void compute_force_MullerBrown();
+        void compute_force_Ackley();
 
 };
 
@@ -298,7 +300,7 @@ inline void Simulation:: run_ZBAOABZ(){
 
 // FORCES
 
-// constants used in the force routine
+// MullerBrown
 const std:: vector <double> MullerBrown_A {-200, -100, -170, 15};  
 const std:: vector <double> MullerBrown_a {-1, -1, -6.5, 0.7};
 const std:: vector <double> MullerBrown_b {0, 0, 11, 0.6};
@@ -325,3 +327,22 @@ inline void Simulation:: compute_force_MullerBrown(){
 }
 
 
+// Ackley
+const double Ackley_2pi {2*M_PI};
+double Ackley_distconst;
+double Ackley_x, Ackley_y;
+
+inline void Simulation:: compute_force_Ackley(){
+
+    // Fill help constants.
+    Ackley_x = params.position.x;
+    Ackley_y = params.position.y;
+    Ackley_distconst = sqrt(0.5*(Ackley_x*Ackley_x + Ackley_y*Ackley_y));
+    
+    // Compute force.
+    params.force.x = -2*Ackley_x*exp(-0.2*Ackley_distconst)/Ackley_distconst 
+                      - M_PI*sin(Ackley_2pi*Ackley_x)*exp(0.5*(cos(Ackley_2pi*Ackley_x)+cos(Ackley_2pi*Ackley_y)));
+    params.force.y = -2*Ackley_y*exp(-0.2*Ackley_distconst)/Ackley_distconst 
+                      - M_PI*sin(Ackley_2pi*Ackley_y)*exp(0.5*(cos(Ackley_2pi*Ackley_x)+cos(Ackley_2pi*Ackley_y)));
+
+}
