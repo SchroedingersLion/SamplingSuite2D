@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
     ParsedValues vals = processParsedValues(parse_result);
     
     // Set up measurement object.
-    bool method_type = vals.sampler=="ZBAOABZ" ? 1 : 0;
+    bool method_type = vals.sampler=="zbaoabz" ? 1 : 0;
     Measurement results = Measurement(method_type, 
                                       vals.burnin, 
                                       vals.t_meas, 
