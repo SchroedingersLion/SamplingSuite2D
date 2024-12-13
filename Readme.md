@@ -10,11 +10,12 @@ The program prints out a simple .csv file holding time series data to various ob
 It can be easily modified in terms of adding new potentials, observables, and even samplers.
 
 ## Compile
-You need to be able to compile MPI-base C++ programs.
+You need to be able to compile MPI-based C++ programs.
 Download the files in the /src folder. On Linux, using the Gnu Compiler Collection (gcc) with the MPI implementation provided by OpenMPI, compilation is invoked
 via `mpicxx -O3 -o SamplingSuite2D main.cpp`.
 
-If you see an error that the file `cxxopts.hpp` has not been found, download it from https://github.com/jarro2783/cxxopts/tree/master/include and store in your system's include folder (on Linux, this is typically /usr/include). 
+If you see an error that the file `cxxopts.hpp` has not been found, download it from  
+https://github.com/jarro2783/cxxopts/tree/master/include and store in your system's include folder (on Linux, this is typically /usr/include). 
 
 Succesful compilation creates the executable named `SamplingSuite2D`.
 
