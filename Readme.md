@@ -194,15 +194,15 @@ We also need to add a new name for the observable:
 ```
 Since the `observable` vector has grown, we need to adjust its size in the class constructor above, i.e. we need to change the part
 ```c++
-                /*######## ENTER THE NUMBER OF OBSERVABLES TO COLLECT ############*/
-                no_observables = 4; 
-                /*################################################################*/
+            /*######## ENTER THE NUMBER OF OBSERVABLES TO COLLECT ############*/
+            no_observables = 4; 
+            /*################################################################*/
 ```
 to
 ```c++
-                /*######## ENTER THE NUMBER OF OBSERVABLES TO COLLECT ############*/
-                no_observables = 5; 
-                /*################################################################*/
+            /*######## ENTER THE NUMBER OF OBSERVABLES TO COLLECT ############*/
+            no_observables = 5; 
+            /*################################################################*/
 ```
 Then save the file and recompile the code.
 
