@@ -49,7 +49,7 @@ Full list of options:
 
 Note that all options are optional and have default values. Run `./SamplingSuite2D --help` for more information.
 
-Note that the user is responsible for chossing admissible initial conditions (e.g., don't start in a forcefield singularity) and pick meaningful hyperparameters (e.g., don't use negative temperatures). 
+Note that the user is responsible for choosing admissible initial conditions (e.g., don't start in a forcefield singularity) and pick meaningful hyperparameters (e.g., don't use negative temperatures). 
 
 ## Averaging Behavior
 There are several modes of possible averaging behaviors:
