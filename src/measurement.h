@@ -124,6 +124,7 @@ inline void Measurement:: print_to_csv(){
     for (size_t k=0; k<col_names.size(); ++k){
         file << col_names[k] << " ";
     }
+    if (method_type==1) file << "dt zeta "; 
     file << "\n";
 
     // annoying logic to obtain first iteration index at which observable will be printed to file 
@@ -142,8 +143,7 @@ inline void Measurement:: print_to_csv(){
             file << observable_printout[j][i] << " ";  
         }
         
-        if (dt_vals_raw.size() > 0) file << dt_vals_raw[i] << " ";
-        if (zeta_raw.size() > 0) file << zeta_raw[i] << " ";
+        if (method_type==1) file << dt_vals_raw[i] << zeta_raw[i] << " ";
         
         file << "\n";
     }
