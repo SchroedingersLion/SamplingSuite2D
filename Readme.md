@@ -15,7 +15,9 @@ Download the files in the /src folder. On Linux, using the Gnu Compiler Collecti
 via `mpicxx -O3 -o SamplingSuite2D main.cpp`.
 
 If you see an error that the file `cxxopts.hpp` has not been found, download it from  
-https://github.com/jarro2783/cxxopts/tree/master/include and store in your system's include folder (on Linux, this is typically /usr/include). 
+https://github.com/jarro2783/cxxopts/tree/master/include and store in your system's include folder (on Linux, this is typically /usr/include).
+
+If you receive errors such as `a space is required between consecutive right angle brackets`, it indicates that you compile against a C++ standard that is too old. In that case, try to add the compiler flag `-std=c++17`.
 
 Successful compilation creates the executable `SamplingSuite2D`.
 
