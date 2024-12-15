@@ -14,8 +14,10 @@ You need to be able to compile MPI-based C++ programs.
 Download the files in the /src folder. On Linux, using the Gnu Compiler Collection (gcc) with the MPI implementation provided by OpenMPI, compilation is invoked
 via `mpicxx -O3 -o SamplingSuite2D main.cpp`.
 
-If you see an error that the file `cxxopts.hpp` has not been found, download it from  
-https://github.com/jarro2783/cxxopts/tree/master/include and store in your system's include folder (on Linux, this is typically /usr/include).
+If you see an error that the header file `cxxopts.hpp` has not been found, it either means that this file is not in the default include folder or not present on your system at all.
+If you locate the file in a specific folder, either copy it to the default include folder (on Linux, this is typically /usr/include), or pass the `-I` compiler flag to specify additional include folders for the compiler to look at.
+On Mac, this might be the `opt/homebrew/include` folder, so the compiler flag would be `-I/opt/homebrew/include`.
+If the header is missing alltogether, download it from https://github.com/jarro2783/cxxopts/tree/master/include and store it in your system's default include folder (or in an optional folder and using the `-I` flag again).
 
 If you receive errors such as `a space is required between consecutive right angle brackets`, it indicates that you compile against a C++ standard that is too old. In that case, try to add the compiler flag `-std=c++17`.
 
