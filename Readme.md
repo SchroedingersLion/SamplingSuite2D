@@ -151,16 +151,16 @@ In case the sampler used is ZBAOABZ, it will automatically collect the adaptive 
 ### Change observables to collect
 To change the collected observables or add new ones, we need to modify the `take_measurement` routine of the `Measurement` class in the `measurement.h` file.
 ```c++
-        void take_measurement(const parameters& parameters){
+        void take_measurement(const parameters& params){
 
             /* ########### COMPUTE CURRENT OBSERVABLE VALUES FROM PARAMETERS #####################################
                The number of entries in vector "observables" must correspond to member variable "no_observables" set by the user
                in the constructor above. The reweighting for the adaptive schemes is done automatically by the "process_sample" routine. 
                The adaptive schemes will also automatically store the adaptive step size and the \zeta variable. */            
-            observables[0] = parameters.position.x;	 // x-coordinate
-            observables[1] = parameters.position.y;  // y-coordinate
-            observables[2] = 0.5*(parameters.velocity.x*parameters.velocity.x + parameters.velocity.y*parameters.velocity.y);   // Tkin
-            observables[3] = -0.5*(parameters.position.x*parameters.force.x + parameters.position.y*parameters.force.y);        // Tconf
+            observables[0] = params.position.x;	 // x-coordinate
+            observables[1] = params.position.y;  // y-coordinate
+            observables[2] = 0.5*(params.velocity.x*params.velocity.x + params.velocity.y*params.velocity.y);   // Tkin
+            observables[3] = -0.5*(params.position.x*params.force.x + params.position.y*params.force.y);        // Tconf
             /*########################################################################*/
 
             /*################# ENTER NAMES OF OBSERVABLES (WILL BE HEADER OF OUTPUTFILE)####*/
@@ -170,19 +170,19 @@ To change the collected observables or add new ones, we need to modify the `take
             col_names[3] = "Tconf";
             /*################################################################################*/
 
-            process_sample(parameters);   // compute (reweighted) time average and stores results for later print-out.
+            process_sample(params);   // compute (reweighted) time average and stores results for later print-out.
 
             return;
 
         };
 ```
-The `observables` vector can be filled with functions of the current simulation state given by the `parameters` object. If we want to add a new observable, for example the distance of the position to the origin, $\sqrt{x^2+y^2}$, we just need to add an additional line specifying that new observable:
+The `observables` vector can be filled with functions of the current simulation state given by the `params` object. If we want to add a new observable, for example the distance of the position to the origin, $\sqrt{x^2+y^2}$, we just need to add an additional line specifying that new observable:
 ```c++
-            observables[0] = parameters.position.x;	 // x-coordinate
-            observables[1] = parameters.position.y;  // y-coordinate
-            observables[2] = 0.5*(parameters.velocity.x*parameters.velocity.x + parameters.velocity.y*parameters.velocity.y);   // Tkin
-            observables[3] = -0.5*(parameters.position.x*parameters.force.x + parameters.position.y*parameters.force.y);        // Tconf
-            observables[4] = sqrt(parameters.position.x*parameters.position.x+parameters.position.y*parameters.position.y);  // Our new observable.
+            observables[0] = params.position.x;	 // x-coordinate
+            observables[1] = params.position.y;  // y-coordinate
+            observables[2] = 0.5*(params.velocity.x*params.velocity.x + params.velocity.y*params.velocity.y);   // Tkin
+            observables[3] = -0.5*(params.position.x*params.force.x + params.position.y*params.force.y);        // Tconf
+            observables[4] = sqrt(params.position.x*params.position.x+params.position.y*params.position.y);  // Our new observable.
 ```
 We also need to add a new name for the observable:
 ```c++
