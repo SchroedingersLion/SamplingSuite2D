@@ -26,7 +26,7 @@ Successful compilation creates the executable `SamplingSuite2D`.
 ## Run
 To run the simulation use `mpirun -n <num_processes> SamplingSuite2D [OPTIONS]` where `<num_processes>` should be replaced with the number of processes desired.
 Each process will run an independent trajectory. The options are specified via  
-```--option_name option_value```, 
+```--option_name arg```, 
 e.g., `--stepsize 0.01`.  
 Full list of options:  
 
