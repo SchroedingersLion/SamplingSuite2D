@@ -131,12 +131,12 @@ inline void Measurement:: print_to_csv(){
     // print results to file
     for ( size_t i = 0; i<observable_printout[0].size(); ++i )
     {
-        file << first_index + i*t_meas*n_dist << " ";
+        file << first_index + i*t_meas*n_dist;
         for ( size_t j = 0; j<no_observables; ++j ){
-            file << observable_printout[j][i] << " ";  
+            file << " " << observable_printout[j][i];  
         }
         
-        if (method_type==1) file << dt_vals_raw[i] << zeta_raw[i] << " ";
+        if (method_type==1) file << " " << dt_vals_raw[i] << " " << zeta_raw[i];
         
         file << "\n";
     }
