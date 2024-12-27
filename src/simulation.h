@@ -33,6 +33,7 @@ class Simulation{
                    const int N_iteration,
                    const int t_meas,
                    const int burnin,
+                   const int rng_seed,
                    const std:: string& forcefield, 
                    const coordinate init_position, 
                    const coordinate init_velocity,
@@ -46,6 +47,7 @@ class Simulation{
                     N_iteration {N_iteration},
                     t_meas {t_meas},
                     burnin {burnin},
+                    rng_seed {rng_seed},
                     forcefield {forcefield},
                     results {results}
         {
@@ -87,6 +89,7 @@ class Simulation{
         const int t_meas;
         const int burnin;
         Measurement& results;
+        const int rng_seed;
         std:: mt19937 twister;
         std:: normal_distribution<> normal{0,1};
         void (Simulation::* run_sampler)();
@@ -117,7 +120,7 @@ inline void Simulation:: run_MPI_simulation(int argc, char *argv[]){
 
 
     // Seed RNG with mpi rank
-    const int seed = rank;
+    const int seed = rank + rng_seed;
 
     std:: seed_seq seq{1,20,3200,403,5*seed+1,12000,73667,9474+seed,19151-seed};
     std:: vector < std::uint32_t > seeds(1);
