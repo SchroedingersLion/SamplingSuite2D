@@ -65,6 +65,8 @@ class Simulation{
             else if (forcefield == "ackley")     compute_force = &Simulation:: compute_force_Ackley;
             else if (forcefield == "rosenbrock") compute_force = &Simulation:: compute_force_Rosenbrock;
             else if (forcefield == "beale")      compute_force = &Simulation:: compute_force_Beale;
+            else if (forcefield == "entropicchannel") compute_force = &Simulation:: compute_force_EntropicChannel;
+
             else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
             
 
@@ -105,6 +107,7 @@ class Simulation{
         void compute_force_Ackley();
         void compute_force_Rosenbrock();
         void compute_force_Beale();
+        void compute_force_EntropicChannel();
 
 };
 
@@ -371,5 +374,22 @@ inline void Simulation:: compute_force_Beale(){
 
     params.force.x = -Beale_var1*(-1+params.position.y) - Beale_var2*(-1+y_sq) - Beale_var3*(-1+y_sq*params.position.y);
     params.force.y = -params.position.x * (Beale_var1 + 2*params.position.y*Beale_var2 + 3*y_sq*Beale_var3);
+
+}
+
+
+
+// Entropic Channel
+double EntropicChannel_x2;
+double EntropicChannel_denominator;
+
+inline void Simulation:: compute_force_EntropicChannel(){
+
+    EntropicChannel_x2 = params.position.x * params.position.x;
+    EntropicChannel_denominator = 1+10*EntropicChannel_x2*EntropicChannel_x2;
+
+    params.force.x = 4000 * (EntropicChannel_x2*params.position.x*params.position.y*params.position.y) / (EntropicChannel_denominator*EntropicChannel_denominator) - 0.004*(EntropicChannel_x2-9)*params.position.x;
+
+    params.force.y = -200 * params.position.y / EntropicChannel_denominator;
 
 }
