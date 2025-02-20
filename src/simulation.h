@@ -64,6 +64,7 @@ class Simulation{
             if (forcefield == "mullerbrown")     compute_force = &Simulation:: compute_force_MullerBrown;
             else if (forcefield == "ackley")     compute_force = &Simulation:: compute_force_Ackley;
             else if (forcefield == "rosenbrock") compute_force = &Simulation:: compute_force_Rosenbrock;
+            else if (forcefield == "rosenbrock_noisy") compute_force = &Simulation:: compute_force_Rosenbrock_Noisy;
             else if (forcefield == "beale")      compute_force = &Simulation:: compute_force_Beale;
             else if (forcefield == "entropicchannel") compute_force = &Simulation:: compute_force_EntropicChannel;
 
@@ -108,6 +109,8 @@ class Simulation{
         void compute_force_Rosenbrock();
         void compute_force_Beale();
         void compute_force_EntropicChannel();
+        void compute_force_Rosenbrock_Noisy();
+
 
 };
 
@@ -391,5 +394,19 @@ inline void Simulation:: compute_force_EntropicChannel(){
     params.force.x = 4000 * (EntropicChannel_x2*params.position.x*params.position.y*params.position.y) / (EntropicChannel_denominator*EntropicChannel_denominator) - 0.004*(EntropicChannel_x2-9)*params.position.x;
 
     params.force.y = -200 * params.position.y / EntropicChannel_denominator;
+
+}
+
+
+
+// Noisy Rosenbrock
+constexpr double sigma {1};
+inline void Simulation:: compute_force_Rosenbrock_Noisy(){
+
+    params.force.x = 400*params.position.x*(params.position.y - params.position.x*params.position.x)
+                     + 2*(1-params.position.x)
+                     + sigma*normal(twister);
+    
+    params.force.y = -200*(params.position.y - params.position.x*params.position.x) + sigma*normal(twister);
 
 }
