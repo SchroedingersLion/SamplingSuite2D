@@ -385,22 +385,22 @@ inline void Simulation:: compute_force_Rosenbrock(){
 
 // Beale confined
 double Beale_var1, Beale_var2, Beale_var3;
-double y_sq, x_to_5, Beale_confined_exponential;
-constexpr double Beale_confined_a {0.00001}, Beale_confinded_b {0.3};
+double y_sq, x_to_5, y_to_5, Beale_confined_exponential;
+constexpr double Beale_confined_a {0.00001}, Beale_confined_b {0.3};
 inline void Simulation:: compute_force_Beale(){
 
     y_sq = params.position.y*params.position.y;
     
     x_to_5 = params.position.x * params.position.x * params.position.x * params.position.x * params.position.x;
-    y_to_5 = y_sq * y_sq *params.position.y
+    y_to_5 = y_sq * y_sq *params.position.y;
     Beale_confined_exponential = exp( Beale_confined_a * (x_to_5*params.position.x + y_to_5*params.position.y) );
     
     Beale_var1 = 2*(1.5   - params.position.x + params.position.x*params.position.y);
     Beale_var2 = 2*(2.25  - params.position.x + params.position.x*y_sq);
     Beale_var3 = 2*(2.625 - params.position.x + params.position.x*y_sq*params.position.y);
 
-    params.force.x = -Beale_var1*(-1+params.position.y) - Beale_var2*(-1+y_sq) - Beale_var3*(-1+y_sq*params.position.y) - 6*Beale_confined_a*Beale_confinded_b*x_to_5*Beale_confined_exponential;
-    params.force.y = -params.position.x * (Beale_var1 + 2*params.position.y*Beale_var2 + 3*y_sq*Beale_var3) - 6*Beale_confinded_a*Beale_confined_b*y_to_5*Beale_confined_exponential;
+    params.force.x = -Beale_var1*(-1+params.position.y) - Beale_var2*(-1+y_sq) - Beale_var3*(-1+y_sq*params.position.y) - 6*Beale_confined_a*Beale_confined_b*x_to_5*Beale_confined_exponential;
+    params.force.y = -params.position.x * (Beale_var1 + 2*params.position.y*Beale_var2 + 3*y_sq*Beale_var3) - 6*Beale_confined_a*Beale_confined_b*y_to_5*Beale_confined_exponential;
 
 }
 
