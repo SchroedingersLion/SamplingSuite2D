@@ -66,6 +66,7 @@ class Simulation{
             else if (forcefield == "rosenbrock") compute_force = &Simulation:: compute_force_Rosenbrock;
             else if (forcefield == "rosenbrock_noisy") compute_force = &Simulation:: compute_force_Rosenbrock_Noisy;
             else if (forcefield == "beale")      compute_force = &Simulation:: compute_force_Beale;
+            else if (forcefield == "beale_noisy") compute_force = &Simulation:: compute_force_Beale_Noisy;
             else if (forcefield == "entropicchannel") compute_force = &Simulation:: compute_force_EntropicChannel;
 
             else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
@@ -110,6 +111,7 @@ class Simulation{
         void compute_force_Beale();
         void compute_force_EntropicChannel();
         void compute_force_Rosenbrock_Noisy();
+        void compute_force_Beale_Noisy();
 
 
 };
@@ -382,6 +384,23 @@ inline void Simulation:: compute_force_Beale(){
 
 
 
+// Noisy Beale
+constexpr double sigma_beale {2};
+inline void Simulation:: compute_force_Beale_Noisy(){
+
+    y_sq = params.position.y*params.position.y;
+    Beale_var1 = 2*(1.5   - params.position.x + params.position.x*params.position.y);
+    Beale_var2 = 2*(2.25  - params.position.x + params.position.x*y_sq);
+    Beale_var3 = 2*(2.625 - params.position.x + params.position.x*y_sq*params.position.y);
+
+    params.force.x = -Beale_var1*(-1+params.position.y) - Beale_var2*(-1+y_sq) - Beale_var3*(-1+y_sq*params.position.y) + sigma_beale*normal(twister);
+    params.force.y = -params.position.x * (Beale_var1 + 2*params.position.y*Beale_var2 + 3*y_sq*Beale_var3) + sigma_beale*normal(twister);
+
+}
+
+
+
+
 // Entropic Channel
 double EntropicChannel_x2;
 double EntropicChannel_denominator;
@@ -400,13 +419,13 @@ inline void Simulation:: compute_force_EntropicChannel(){
 
 
 // Noisy Rosenbrock
-constexpr double sigma {1};
+constexpr double sigma_rosenbrock {2};
 inline void Simulation:: compute_force_Rosenbrock_Noisy(){
 
     params.force.x = 400*params.position.x*(params.position.y - params.position.x*params.position.x)
                      + 2*(1-params.position.x)
-                     + sigma*normal(twister);
+                     + sigma_rosenbrock*normal(twister);
     
-    params.force.y = -200*(params.position.y - params.position.x*params.position.x) + sigma*normal(twister);
+    params.force.y = -200*(params.position.y - params.position.x*params.position.x) + sigma_rosenbrock*normal(twister);
 
 }

@@ -39,7 +39,7 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
 
         )";
     
-    cxxopts::Options options("SamplingSuited2D", description);
+    cxxopts::Options options("SamplingSuite2D", description);
 
     // Define command line options.
     options.add_options()
@@ -49,7 +49,9 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("friction",        "Friction parameter in Langevin dynamics.",                 cxxopts:: value <double>()->default_value(_friction_default))
         ("alpha1",          "Hyperparameter alpha_1 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha1_default))
         ("alpha2",          "Hyperparameter alpha_2 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha2_default))        
-        ("forcefield",      "Forcefield. Allowed values 'mullerbrown', 'ackley', 'rosenbrock', 'beale' or 'entropicchannel'.", cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
+        ("forcefield",      "Forcefield. Allowed values 'mullerbrown', 'ackley'," 
+                            "'rosenbrock', 'rosenbrock_noisy', 'beale', 'beale_noisy'," 
+                             "or 'entropicchannel'.",                                    cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
         ("init_position",   "Initial position. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_position_default))
         ("init_velocity",   "Initial velocity. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_velocity_default))
         ("N_iteration",     "Number of simulation steps.",                              cxxopts:: value <int>()->default_value(_N_iteration_default))
