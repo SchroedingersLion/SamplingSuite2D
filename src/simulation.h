@@ -198,7 +198,7 @@ inline void Simulation:: run_BAOAB(){
     std::cout<<"starting main loop"<<std::endl;
 
     // MAIN LOOP.
-    for ( size_t i = 0;  i < N_iteration;  ++i ) {
+    for ( size_t i = 0;  i <= N_iteration;  ++i ) {
 
         // TAKE MEASUREMENT
         if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(params);
@@ -260,7 +260,7 @@ inline void Simulation:: run_ZBAOABZ(){
     std::cout<<"starting main loop"<<std::endl;
 
     // MAIN LOOP
-    for ( size_t i = 0;  i < N_iteration;  ++i ) {
+    for ( size_t i = 0;  i <= N_iteration;  ++i ) {
         
         // TAKE MEASUREMENT
         if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(params);

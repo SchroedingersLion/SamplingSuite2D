@@ -39,7 +39,7 @@ class Measurement {
                 observable_sums.resize(no_observables);
                 col_names.resize(no_observables);
 
-                int no_elements {(N_iteration-burnin) / (n_dist*t_meas)}; // Number of elements needed in the t-averaged results vector.
+                int no_elements {(N_iteration-burnin) / (n_dist*t_meas)+1}; // Number of elements needed in the t-averaged results vector.
                 if (no_elements<0) throw std:: invalid_argument( "\n Combination of N_iteration, burnin, n_dist, and t_meas makes no sense. Is N_iter < burnin? \n" );
 
                 observable_tavgs = std:: vector <std:: vector <float>> (no_observables, std::vector <float> (no_elements));
@@ -107,73 +107,6 @@ class Measurement {
 
 // implementation of measurement class routines that the user does not need to modify.
 
-inline void Measurement:: print_to_csv(){
-    
-    std:: ofstream file{output_name};
-    std:: cout << "Writing to file...\n";
-
-    // Write header with specified column names.
-    file << "Iteration ";
-    for (size_t k=0; k<col_names.size(); ++k){
-        file << col_names[k] << " ";
-    }
-    if (method_type==1) file << "dt zeta "; 
-    file << "\n";
-
-    // annoying logic to obtain first iteration index at which observable will be printed to file 
-    // (depends on variables burnin, t_meas, and n_dist).
-    int first_index;  
-    if (burnin >= t_meas) first_index = (burnin % t_meas) == 0  ?  burnin :  burnin - (burnin % t_meas) + t_meas;
-    else if ( (0<burnin) && (burnin<t_meas) ) first_index = t_meas;
-    else if ( burnin == 0 ) first_index = 0;
-    else throw std::invalid_argument( "Something wrong in write function." );
-
-    // print results to file
-    for ( size_t i = 0; i<observable_printout[0].size(); ++i )
-    {
-        file << first_index + i*t_meas*n_dist;
-        for ( size_t j = 0; j<no_observables; ++j ){
-            file << " " << observable_printout[j][i];  
-        }
-        
-        if (method_type==1) file << " " << dt_vals_raw[i] << " " << zeta_raw[i];
-        
-        file << "\n";
-    }
-
-    file.close();
-
-    return;
-
-}
-
-
-inline void Measurement:: mpi_reduction(MPI_Comm& comm, const int& rank, const int& nr_proc){   // MPI AVERAGE ROUTINE
-    
-    // resize output array to store averaged results in
-    observable_printout.resize(no_observables);
-    const int row_size = observable_tavgs[0].size();
-    if (rank==0){
-        for (size_t i=0; i<no_observables; ++i){
-            observable_printout[i].resize( row_size ); 
-        }    
-    }
-
-    // collect results from processes
-    for (size_t i=0; i<no_observables; ++i) MPI_Reduce( &observable_tavgs[i][0], &observable_printout[i][0], row_size, MPI_FLOAT, MPI_SUM, 0, comm);  
-
-    if( rank==0 ){
-        for (size_t i=0; i<no_observables; ++i){
-            for (size_t j=0;  j<row_size; ++j){
-                observable_printout[i][j] /= nr_proc;     // divide by no. of processes to obtain averages
-            }
-        }
-    }
-
-    return;      
-};
-
-
 inline void Measurement:: process_sample(const parameters& parameters){
 
     if (method_type==0){   // Constant step size scheme, eg. BAOAB.
@@ -193,7 +126,7 @@ inline void Measurement:: process_sample(const parameters& parameters){
         // No time average.
         else{
              // Store the observables for print-out without averaging.
-             if (ctr % n_dist == 0){                                             
+             if (ctr % n_dist == 0){     
                 for (int i=0; i<no_observables; ++i) observable_tavgs[i][k] = observables[i];
                 ++k;
              }           
@@ -224,6 +157,75 @@ inline void Measurement:: process_sample(const parameters& parameters){
     }
 
     ++ctr;
+
+}
+
+
+inline void Measurement:: mpi_reduction(MPI_Comm& comm, const int& rank, const int& nr_proc){   // MPI AVERAGE ROUTINE
+    
+    // resize output array to store averaged results in
+    observable_printout.resize(no_observables);
+    const int row_size = observable_tavgs[0].size();
+    if (rank==0){
+        for (size_t i=0; i<no_observables; ++i){
+            observable_printout[i].resize( row_size ); 
+        }    
+    }
+
+    // collect results from processes
+    for (size_t i=0; i<no_observables; ++i) MPI_Reduce( &observable_tavgs[i][0], &observable_printout[i][0], row_size, MPI_FLOAT, MPI_SUM, 0, comm);  
+
+    if( rank==0 ){
+        for (size_t i=0; i<no_observables; ++i){
+            for (size_t j=0;  j<row_size; ++j){
+                observable_printout[i][j] /= nr_proc;     // divide by no. of processes to obtain averages
+            }
+        }
+    }
+
+    return;      
+};
+
+
+inline void Measurement:: print_to_csv(){
+    
+    std:: ofstream file{output_name};
+    std:: cout << "Writing to file...\n";
+
+    // Write header with specified column names.
+    file << "Iteration ";
+    for (size_t k=0; k<col_names.size(); ++k){
+        file << col_names[k] << " ";
+    }
+    if (method_type==1) file << "dt zeta "; 
+    file << "\n";
+
+    // annoying logic to obtain first iteration index at which observable will be printed to file 
+    // (depends on variables burnin, t_meas, and n_dist).
+    int first_index;  
+    if (burnin >= t_meas) first_index = (burnin % t_meas) == 0  ?  burnin :  burnin - (burnin % t_meas) + t_meas;
+    else if ( (0<burnin) && (burnin<t_meas) ) first_index = t_meas;
+    else if ( burnin == 0 ) first_index = 0;
+    else throw std::invalid_argument( "Something wrong in write function." );
+
+
+
+    // print results to file
+    for ( size_t i = 0; i<observable_printout[0].size(); ++i )
+    {
+        file << first_index + i*t_meas*n_dist;
+        for ( size_t j = 0; j<no_observables; ++j ){
+            file << " " << observable_printout[j][i];  
+        }
+        
+        if (method_type==1) file << " " << dt_vals_raw[i] << " " << zeta_raw[i];
+        
+        file << "\n";
+    }
+
+    file.close();
+
+    return;
 
 }
 
