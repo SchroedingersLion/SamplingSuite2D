@@ -68,6 +68,7 @@ class Simulation{
             else if (forcefield == "beale")      compute_force = &Simulation:: compute_force_Beale;
             else if (forcefield == "beale_noisy") compute_force = &Simulation:: compute_force_Beale_Noisy;
             else if (forcefield == "entropicchannel") compute_force = &Simulation:: compute_force_EntropicChannel;
+            else if (forcefield == "star") compute_force = &Simulation:: compute_force_StarPotential;
 
             else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
             
@@ -112,6 +113,7 @@ class Simulation{
         void compute_force_EntropicChannel();
         void compute_force_Rosenbrock_Noisy();
         void compute_force_Beale_Noisy();
+        void compute_force_StarPotential();
 
 
 };
@@ -449,5 +451,14 @@ inline void Simulation:: compute_force_Rosenbrock_Noisy(){
                      + sigma_rosenbrock*normal(twister);
     
     params.force.y = -200*(params.position.y - params.position.x*params.position.x) + sigma_rosenbrock*normal(twister);
+
+}
+
+
+
+inline void Simulation:: compute_force_StarPotential(){
+
+    params.force.x = -2*params.position.x - 2000*params.position.x*params.position.y*params.position.y;
+    params.force.y = -2*(1+1000*params.position.x*params.position.x) * params.position.y;
 
 }
