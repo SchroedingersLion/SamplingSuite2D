@@ -98,6 +98,22 @@ It has a minimum at $(0,0)$.
 **Reference**:  
 Ackley, D. H. (1987) **A connectionist machine for genetic hillclimbing**, Kluwer Academic Publishers, Boston MA. p. 13-14.
 
+## Beale
+The Beale potential is given by 
+
+$$U(x,y)= (1.5-x+xy)^2 + (2.25-x+xy^2)^2 + (2.625-x+xy^3)^2.$$
+
+It has a minimum at $(3,0.5)$. 
+
+While the Beale function already leads to a normalizable density, we add an additional confining potential to the expression above, given by 
+
+$$U_{\text{confining}}(x,y) = 0.3e^{0.00001(x^6+y^6)}. $$
+
+Resulting potential: 
+![Beale potential](images/Beale_plot.png)
+
+
+
 ### How to add new potentials
 It is straightforward to add new 2D potentials to the codebase.
 To see how it is done, open the `simulation.h` file and scroll down to the definitions of the force functions, e.g., `inline void Simulation:: compute_force_ackley()` for the Ackley force:
