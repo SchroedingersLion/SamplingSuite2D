@@ -79,8 +79,19 @@ The time average behavior can be fine-controlled with the `t_meas` flag. The obs
 Whether the moving average will be printed to the output file at each of these time points also depends on the flag `n_dist`. Only any `n_dist` times the moving average was updated will it be printed to output (that way, the accuracy of the moving average can be increased without increasing the size of the output file). In case of no time averaging, `n_dist` should simply remain `1` (the default value).
 
 
-## Implemented Potentials
-Currently, the following potentials are implemented: Muller-Brown (`--forcefield mullerbrown`), Ackley (`--forcefield ackley`), Rosenbrock (`--forcefield rosenbrock`), and Beale (`--forcefield beale`).
+## Implemented Potentials 
+The potential $U(x,y)$ to sample is governed by passing the `--forcefield` flag with an admissible argument (e.g., `--forcefield ackley` for the Ackley potential).
+For a list of shipped potentials, run `./SamplingSuite2D --help`. 
+ 
+Note that some of these potentials do not lead to normalizable densities $\propto e^{-\beta U(x,y)}$. These landscapes can still be of interest to test optimizers or examine trapping or rare-event transitions.
+
+### Ackley
+The Ackley potential (not normalizable) is given by 
+$$
+U(x,y)=-20e^{-0.2 \sqrt{\frac{1}{1}(x^2+y^2)}} - e^{\frac{1}{2}(\cos(2\pi x)+\cos(2 \pi y))}.
+$$
+It has a minimum at $(0,0)$.
+![Ackley potential](imges/Ackley_plot.png)
 
 ### How to add new potentials
 It is straightforward to add new 2D potentials to the codebase.
