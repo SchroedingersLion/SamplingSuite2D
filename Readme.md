@@ -9,6 +9,7 @@ The program prints out a simple .csv file holding time series data to various ob
 
 It can be easily modified in terms of adding new potentials, observables, and even samplers.
 
+# Table of Content
 - [SamplingSuite2D](#samplingsuite2d)
   - [Compile](#compile)
   - [Run](#run)
