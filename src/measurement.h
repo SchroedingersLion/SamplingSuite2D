@@ -46,6 +46,7 @@ class Measurement {
 
                 // the adaptive schemes also collect the adaptive step sizes.
                 if (method_type==1){ 
+                    dt_tavg.resize(no_elements);
                     dt_vals_raw.resize(no_elements);
                     zeta_raw.resize(no_elements);
                 } 
@@ -90,8 +91,10 @@ class Measurement {
         std:: vector <std:: string> col_names;          // names of the columns in the output file (names of the observables).
         std:: vector <std:: vector <float>> observable_tavgs;       // store the evolving time average for each observable
         std:: vector <std:: vector <float>> observable_printout;    // store the mpi process average of vector "observable_tavgs" on rank 0 
-        std:: vector <double> dt_vals_raw;              // store samples of adaptive step size (only for adaptive schemes)
-        std:: vector <double> zeta_raw;                 // store samples of zeta (only for adaptive schemes)                 
+        std:: vector <float> dt_tavg;
+        std:: vector <float> dt_printout;
+        std:: vector <float> dt_vals_raw;              // store samples of adaptive step size (only for adaptive schemes)
+        std:: vector <float> zeta_raw;                 // store samples of zeta (only for adaptive schemes)                 
         int no_observables;                             // number of observables to be taken
         const int method_type;                          // 0=constant step size scheme, 1=adaptive scheme
         const bool time_average;                        // decide whether observables will be time-averaged
@@ -138,9 +141,11 @@ inline void Measurement:: process_sample(const parameters& parameters){
         if (time_average){
             for (int i=0; i<no_observables; ++i) observable_sums[i] += observables[i] * parameters.dt;  // Reweighting.
             dt_sum += parameters.dt;
+            ++t_avg_normalizer;
 
             if (ctr % n_dist == 0){                                                 
                 for (int i=0; i<no_observables; ++i) observable_tavgs[i][k] = observable_sums[i] / dt_sum;
+                dt_tavg[k] = dt_sum/t_avg_normalizer;
                 dt_vals_raw[k] = parameters.dt;
                 zeta_raw[k] = parameters.zeta;
                 ++k;
@@ -149,6 +154,7 @@ inline void Measurement:: process_sample(const parameters& parameters){
         else {
             if (ctr % n_dist == 0){                                                 
                 for (int i=0; i<no_observables; ++i) observable_tavgs[i][k] = observables[i];
+                dt_tavg[k] = parameters.dt;
                 dt_vals_raw[k] = parameters.dt;
                 zeta_raw[k] = parameters.zeta;
                 ++k;
@@ -167,19 +173,18 @@ inline void Measurement:: mpi_reduction(MPI_Comm& comm, const int& rank, const i
     observable_printout.resize(no_observables);
     const int row_size = observable_tavgs[0].size();
     if (rank==0){
-        for (size_t i=0; i<no_observables; ++i){
-            observable_printout[i].resize( row_size ); 
-        }    
+        for (size_t i=0; i<no_observables; ++i) observable_printout[i].resize( row_size ); 
+        if (method_type==1) dt_printout.resize( row_size );
     }
 
     // collect results from processes
     for (size_t i=0; i<no_observables; ++i) MPI_Reduce( &observable_tavgs[i][0], &observable_printout[i][0], row_size, MPI_FLOAT, MPI_SUM, 0, comm);  
+    if (method_type==1) MPI_Reduce( &dt_tavg[0], &dt_printout[0], row_size, MPI_FLOAT, MPI_SUM, 0, comm );
 
     if( rank==0 ){
-        for (size_t i=0; i<no_observables; ++i){
-            for (size_t j=0;  j<row_size; ++j){
-                observable_printout[i][j] /= nr_proc;     // divide by no. of processes to obtain averages
-            }
+        for (size_t j=0;  j<row_size; ++j){
+            for (size_t i=0; i<no_observables; ++i) observable_printout[i][j] /= nr_proc;     // divide by no. of processes to obtain averages
+            if (method_type==1) dt_printout[j] /= nr_proc;
         }
     }
 
@@ -197,7 +202,7 @@ inline void Measurement:: print_to_csv(){
     for (size_t k=0; k<col_names.size(); ++k){
         file << col_names[k] << " ";
     }
-    if (method_type==1) file << "dt zeta "; 
+    if (method_type==1) file << "dt(avg) dt(raw) zeta(raw) "; 
     file << "\n";
 
     // annoying logic to obtain first iteration index at which observable will be printed to file 
@@ -218,7 +223,7 @@ inline void Measurement:: print_to_csv(){
             file << " " << observable_printout[j][i];  
         }
         
-        if (method_type==1) file << " " << dt_vals_raw[i] << " " << zeta_raw[i];
+        if (method_type==1) file << " " << dt_printout[i] << " "<< dt_vals_raw[i] << " " << zeta_raw[i];
         
         file << "\n";
     }
