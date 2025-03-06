@@ -91,7 +91,7 @@ $$
 U(x,y)=-20e^{-0.2 \sqrt{\frac{1}{1}(x^2+y^2)}} - e^{\frac{1}{2}(\cos(2\pi x)+\cos(2 \pi y))}.
 $$
 It has a minimum at $(0,0)$.
-![Ackley potential](imges/Ackley_plot.png)
+![Ackley potential](images/Ackley_plot.png)
 
 ### How to add new potentials
 It is straightforward to add new 2D potentials to the codebase.
