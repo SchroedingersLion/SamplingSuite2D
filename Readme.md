@@ -18,6 +18,7 @@ It can be easily modified in terms of adding new potentials, observables, and ev
     - [Trajectory average](#trajectory-average)
     - [Time average](#time-average)
   - [Implemented Potentials](#implemented-potentials)
+    - [Ackley](#ackley)
     - [How to add new potentials](#how-to-add-new-potentials)
   - [Observables](#observables)
     - [Change observables to collect](#change-observables-to-collect)
