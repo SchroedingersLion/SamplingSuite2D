@@ -9,6 +9,21 @@ The program prints out a simple .csv file holding time series data to various ob
 
 It can be easily modified in terms of adding new potentials, observables, and even samplers.
 
+- [SamplingSuite2D](#samplingsuite2d)
+  - [Compile](#compile)
+  - [Run](#run)
+  - [Averaging Behavior](#averaging-behavior)
+    - [No averaging](#no-averaging)
+    - [Trajectory average](#trajectory-average)
+    - [Time average](#time-average)
+  - [Implemented Potentials](#implemented-potentials)
+    - [How to add new potentials](#how-to-add-new-potentials)
+  - [Observables](#observables)
+    - [Change observables to collect](#change-observables-to-collect)
+  - [Implemented Samplers](#implemented-samplers)
+    - [How to add new samplers](#how-to-add-new-samplers)
+
+
 ## Compile
 You need to be able to compile MPI-based C++ programs.
 Download the files in the /src folder. On Linux, using the Gnu Compiler Collection (gcc) with the MPI implementation provided by OpenMPI, compilation is invoked
