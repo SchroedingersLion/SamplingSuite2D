@@ -111,7 +111,7 @@ It has a minimum at $(3,0.5)$.
 
 While the Beale function already leads to a normalizable density, we add an additional confining potential to the expression above, given by 
 
-$$U_{\text{confining}}(x,y) = 0.3e^{0.00001(x^6+y^6)}. $$
+$$U_{\text{confining}}(x,y) = 0.3e^{10^{-5}(x^6+y^6)}. $$
 
 Resulting potential: 
 ![Beale potential](images/Beale_plot.png)
