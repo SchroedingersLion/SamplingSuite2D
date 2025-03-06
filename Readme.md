@@ -117,8 +117,8 @@ Resulting potential:
 ![Beale potential](images/Beale_plot.png)
 
 
-## Entropic Channel
-`--forcefield entropicchannel`. 
+## Entropic Barrier
+`--forcefield entropicbarrier`. 
 
 This potential connects two valleys through a channel. The main sampling difficulty does not come from an energy barrier but from the narrowness of the channel. 
 

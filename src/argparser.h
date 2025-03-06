@@ -51,7 +51,7 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("alpha2",          "Hyperparameter alpha_2 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha2_default))        
         ("forcefield",      "Forcefield. Allowed values 'mullerbrown', 'ackley'," 
                             "'rosenbrock', 'rosenbrock_noisy', 'beale', 'beale_noisy'," 
-                             "'entropicchannel', or 'star'.",                           cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
+                             "'entropicbarrier', or 'star'.",                           cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
         ("init_position",   "Initial position. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_position_default))
         ("init_velocity",   "Initial velocity. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_velocity_default))
         ("N_iteration",     "Number of simulation steps.",                              cxxopts:: value <int>()->default_value(_N_iteration_default))

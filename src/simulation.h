@@ -67,7 +67,7 @@ class Simulation{
             else if (forcefield == "rosenbrock_noisy") compute_force = &Simulation:: compute_force_Rosenbrock_Noisy;
             else if (forcefield == "beale")      compute_force = &Simulation:: compute_force_Beale;
             else if (forcefield == "beale_noisy") compute_force = &Simulation:: compute_force_Beale_Noisy;
-            else if (forcefield == "entropicchannel") compute_force = &Simulation:: compute_force_EntropicChannel;
+            else if (forcefield == "entropicbarrier") compute_force = &Simulation:: compute_force_EntropicBarrier;
             else if (forcefield == "star") compute_force = &Simulation:: compute_force_StarPotential;
 
             else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
@@ -110,7 +110,7 @@ class Simulation{
         void compute_force_Ackley();
         void compute_force_Rosenbrock();
         void compute_force_Beale();
-        void compute_force_EntropicChannel();
+        void compute_force_EntropicBarrier();
         void compute_force_Rosenbrock_Noisy();
         void compute_force_Beale_Noisy();
         void compute_force_StarPotential();
@@ -426,17 +426,17 @@ inline void Simulation:: compute_force_Beale_Noisy(){
 
 
 // Entropic Channel
-double EntropicChannel_x2;
-double EntropicChannel_denominator;
+double EntropicBarrier_x2;
+double EntropicBarrier_denominator;
 
-inline void Simulation:: compute_force_EntropicChannel(){
+inline void Simulation:: compute_force_EntropicBarrier(){
 
-    EntropicChannel_x2 = params.position.x * params.position.x;
-    EntropicChannel_denominator = 1+10*EntropicChannel_x2*EntropicChannel_x2;
+    EntropicBarrier_x2 = params.position.x * params.position.x;
+    EntropicBarrier_denominator = 1+10*EntropicBarrier_x2*EntropicBarrier_x2;
 
-    params.force.x = 4000 * (EntropicChannel_x2*params.position.x*params.position.y*params.position.y) / (EntropicChannel_denominator*EntropicChannel_denominator) - 0.004*(EntropicChannel_x2-9)*params.position.x;
+    params.force.x = 4000 * (EntropicBarrier_x2*params.position.x*params.position.y*params.position.y) / (EntropicBarrier_denominator*EntropicBarrier_denominator) - 0.004*(EntropicBarrier_x2-9)*params.position.x;
 
-    params.force.y = -200 * params.position.y / EntropicChannel_denominator;
+    params.force.y = -200 * params.position.y / EntropicBarrier_denominator;
 
 }
 
