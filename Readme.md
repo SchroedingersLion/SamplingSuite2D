@@ -87,6 +87,8 @@ For a list of shipped potentials, run `./SamplingSuite2D --help`.
 Note that some of these potentials do not lead to normalizable densities $\propto e^{-\beta U(x,y)}$. These landscapes can still be of interest to test optimizers or examine trapping or rare-event transitions.
 
 ### Ackley
+`forcefield --ackley`. 
+
 The Ackley potential (not normalizable) is given by
 
 $$U(x,y)=-20e^{-0.2 \sqrt{\frac{1}{2}(x^2+y^2)}} - e^{\frac{1}{2}\big(\cos(2\pi x)+\cos(2 \pi y)\big)}.$$
@@ -99,6 +101,8 @@ It has a minimum at $(0,0)$.
 Ackley, D. H. (1987) **A connectionist machine for genetic hillclimbing**, Kluwer Academic Publishers, Boston MA. p. 13-14.
 
 ## Beale
+`--forcefield beale`. 
+
 The Beale potential is given by 
 
 $$U(x,y)= (1.5-x+xy)^2 + (2.25-x+xy^2)^2 + (2.625-x+xy^3)^2.$$
@@ -112,6 +116,17 @@ $$U_{\text{confining}}(x,y) = 0.3e^{0.00001(x^6+y^6)}. $$
 Resulting potential: 
 ![Beale potential](images/Beale_plot.png)
 
+
+## Entropic Channel
+`--forcefield entropicchannel`. 
+
+This potential connects two valleys through a channel. The main sampling difficulty does not come from an energy barrier but from the narrowness of the channel. 
+
+$$ U(x,y)= 100 \frac{y^2}{1+10x^4} + 0.001(x^2-9)^2. $$
+
+It has two local minima at $(\pm 3,0)$ and is symmetric about the two axes.
+
+![Entropic Barrier plot](images/EntropicChannel_plot.png)
 
 
 ### How to add new potentials
