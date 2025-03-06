@@ -136,7 +136,10 @@ $$ U(x,y)=x^2+(1+1000x^2)y^2. $$
 
 Minimum at $(0,0)$.
 
-![Star plot](images/Star_plot.png) ![Star density plot](images/Star_density_plot.png)
+<p align="center">
+    <img src="images/Star_plot.png" alt="Star plot" width="45%">
+    <img src="images/Star_density_plot.png" alt="Star density plot" width="45%">
+</p>
 
 
 ### How to add new potentials
