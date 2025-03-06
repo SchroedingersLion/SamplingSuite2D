@@ -94,7 +94,7 @@ It has a minimum at $(0,0)$.
 
 ![Ackley potential](images/Ackley_plot.png)
 
-**Reference**:/
+**Reference**: 
 Ackley, D. H. (1987) **A connectionist machine for genetic hillclimbing**, Kluwer Academic Publishers, Boston MA. p. 13-14.
 
 ### How to add new potentials
