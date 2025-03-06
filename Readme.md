@@ -129,6 +129,16 @@ It has two local minima at $(\pm 3,0)$ and is symmetric about the two axes.
 ![Entropic Barrier plot](images/EntropicChannel_plot.png)
 
 
+## Star Potential
+`--forcefield star`. 
+
+$$ U(x,y)=x^2+(1+1000x^2)y^2. $$
+
+Minimum at $(0,0)$.
+
+![Star plot](images/Star_plot.png) ![Star density plot](images/Star_density_plot.png)
+
+
 ### How to add new potentials
 It is straightforward to add new 2D potentials to the codebase.
 To see how it is done, open the `simulation.h` file and scroll down to the definitions of the force functions, e.g., `inline void Simulation:: compute_force_ackley()` for the Ackley force:
