@@ -86,9 +86,8 @@ For a list of shipped potentials, run `./SamplingSuite2D --help`.
 Note that some of these potentials do not lead to normalizable densities $\propto e^{-\beta U(x,y)}$. These landscapes can still be of interest to test optimizers or examine trapping or rare-event transitions.
 
 ### Ackley
-The Ackley potential (not normalizable) is given by  
-$$U(x,y)=-20e^{-0.2 \sqrt{\frac{1}{2}(x^2+y^2)}} - e^{\frac{1}{2}(\cos(2\pi x)+\cos(2 \pi y))}.$$ 
-  
+The Ackley potential (not normalizable) is given by
+$$U(x,y)=-20e^{-0.2 \sqrt{\frac{1}{2}(x^2+y^2)}} - e^{\frac{1}{2}(\cos(2\pi x)+\cos(2 \pi y))}.$$
 It has a minimum at $(0,0)$.  
 ![Ackley potential](images/Ackley_plot.png)
 
