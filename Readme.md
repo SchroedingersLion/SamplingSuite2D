@@ -88,10 +88,10 @@ Note that some of these potentials do not lead to normalizable densities $\propt
 ### Ackley
 The Ackley potential (not normalizable) is given by
 
-$$U(x,y)=-20e^{-0.2 \sqrt{\frac{1}{2}(x^2+y^2)}} - e^{\frac{1}{2}(\cos(2\pi x)+\cos(2 \pi y))}.$$
+$$U(x,y)=-20e^{-0.2 \sqrt{\frac{1}{2}(x^2+y^2)}} - e^{\frac{1}{2}\big(\cos(2\pi x)+\cos(2 \pi y)\big)}.$$
 
 It has a minimum at $(0,0)$.
-  
+
 ![Ackley potential](images/Ackley_plot.png)
 
 ### How to add new potentials
