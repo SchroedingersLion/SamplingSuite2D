@@ -69,6 +69,7 @@ class Simulation{
             else if (forcefield == "beale_noisy") compute_force = &Simulation:: compute_force_Beale_Noisy;
             else if (forcefield == "entropicbarrier") compute_force = &Simulation:: compute_force_EntropicBarrier;
             else if (forcefield == "star") compute_force = &Simulation:: compute_force_StarPotential;
+            else if (forcefield == "harmonic_noisy") compute_force = &Simulation:: compute_force_Harmonic_Noisy;
 
             else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
             
@@ -114,6 +115,7 @@ class Simulation{
         void compute_force_Rosenbrock_Noisy();
         void compute_force_Beale_Noisy();
         void compute_force_StarPotential();
+        void compute_force_Harmonic_Noisy();
 
 
 };
@@ -460,5 +462,14 @@ inline void Simulation:: compute_force_StarPotential(){
 
     params.force.x = -2*params.position.x - 2000*params.position.x*params.position.y*params.position.y;
     params.force.y = -2*(1+1000*params.position.x*params.position.x) * params.position.y;
+
+}
+
+
+constexpr double sigma_harmonic {1};
+inline void Simulation:: compute_force_Harmonic_Noisy(){
+
+    params.force.x = -2*params.position.x + sigma_harmonic*normal(twister);
+    params.force.y = -2*params.position.y + sigma_harmonic*normal(twister);
 
 }
