@@ -473,6 +473,6 @@ constexpr double wy_harmonic = 100;
 inline void Simulation:: compute_force_Harmonic_Noisy(){
 
     params.force.x = -2*wx_harmonic*params.position.x;
-    params.force.y = -2*wy_harmonic*params.position.y + params.position.y*sigma_harmonic*normal(twister);
+    params.force.y = -2*wy_harmonic*params.position.y - params.position.y*sigma_harmonic*normal(twister);
 
 }
