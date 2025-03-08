@@ -222,7 +222,7 @@ Add the name of the new forcefield to the string
 ## Observables
 The processing of observables is governed by the `measurement.h` file.  
 Currently, 4 observables are stored: The $x$-coordinate, the $y$-coordinate, the kinetic temperature, and the configurational temperature. The resulting output file will hold time series data for these observables, with the first column holding the iteration counts.   
-In case the sampler used is ZBAOABZ, it will automatically collect the adaptive stepsize `dt` and the $\zeta$ variable and print them as the last two columns of the output file. Even if averaging is activated, these two variables will **never** be averaged. In case of multiple trajectories, they will correspond to the first trajectory.
+In case the sampler used is ZBAOABZ, it will automatically collect time series to three additional quantities: the adaptive stepsize `dt` (averaged as all the other observables), the unaveraged adaptive stepsize `dt`, and unaveraged $\zeta$ variable and print them as the last three columns of the output file. Even if averaging is activated, the last two of the three will **never** be averaged. In case of multiple trajectories, they will correspond to the first trajectory.
 
 ### Change observables to collect
 To change the collected observables or add new ones, we need to modify the `take_measurement` routine of the `Measurement` class in the `measurement.h` file.
