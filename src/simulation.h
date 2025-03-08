@@ -37,6 +37,7 @@ class Simulation{
                    const std:: string& forcefield, 
                    const coordinate init_position, 
                    const coordinate init_velocity,
+                   const double sigma_harmonic,
                    Measurement& results)
                 :   sampler {sampler},
                     stepsize {stepsize},
@@ -49,6 +50,7 @@ class Simulation{
                     burnin {burnin},
                     rng_seed {rng_seed},
                     forcefield {forcefield},
+                    sigma_harmonic {sigma_harmonic},                    
                     results {results}
         {
 
@@ -115,6 +117,7 @@ class Simulation{
         void compute_force_Rosenbrock_Noisy();
         void compute_force_Beale_Noisy();
         void compute_force_StarPotential();
+        const double sigma_harmonic;
         void compute_force_Harmonic_Noisy();
 
 
@@ -466,7 +469,6 @@ inline void Simulation:: compute_force_StarPotential(){
 }
 
 
-constexpr double sigma_harmonic {1};
 inline void Simulation:: compute_force_Harmonic_Noisy(){
 
     params.force.x = -2*params.position.x + sigma_harmonic*normal(twister);

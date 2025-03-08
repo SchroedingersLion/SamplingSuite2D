@@ -21,6 +21,7 @@ const std:: string  _n_dist_default {"1"};
 const std:: string  _burnin_default {"0"};
 const std:: string  _seed_default {"1"};
 const std:: string  _output_name_default {"results.csv"};
+const std:: string  _sigma_harmonic_default {"1"};
 
 
 std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc, char* argv[]) {
@@ -60,7 +61,9 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("burnin",          "Start taking measurements only after burnin iterations.",  cxxopts:: value <int>()->default_value(_burnin_default))
         ("seed",            "Randomseed.",                                              cxxopts:: value <int>()->default_value(_seed_default))
         ("output_name",     "Name of the printed file holding the results.",            cxxopts:: value <std:: string>()->default_value(_output_name_default))               
-        ("time_average",    "If flag is set, results will be time-averaged on the fly.",cxxopts:: value<bool>())           
+        ("time_average",    "If flag is set, results will be time-averaged on the fly.",cxxopts:: value<bool>())
+        ("sigma_harmonic",  "Standard deviation of Gaussian noise in the noisy"
+                            "harmonic oscillator model.",                               cxxopts:: value<double>()->default_value(_sigma_harmonic_default))           
         ("help",            "Print help");
 
     // Parse command line.
@@ -85,6 +88,7 @@ struct ParsedValues{
     int seed;
     std:: string output_name;
     bool time_average;
+    double sigma_harmonic;
 };
 
 
@@ -109,6 +113,7 @@ ParsedValues processParsedValues(const cxxopts:: ParseResult& result) {
     values.seed          = result.count("seed")          ? result["seed"].as<int>()                          : std:: stoi(_seed_default);
     values.output_name   = result.count("output_name")   ? result["output_name"].as<std::string>()           : _output_name_default;
     values.time_average  = result.count("time_average");
+    values.sigma_harmonic = result.count("sigma_harmonic") ? result["sigma_harmonic"].as<double>()           : std:: stod(_sigma_harmonic_default);
 
     return values;
 }
