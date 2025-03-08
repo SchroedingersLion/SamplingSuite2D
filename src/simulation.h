@@ -468,10 +468,11 @@ inline void Simulation:: compute_force_StarPotential(){
 
 }
 
-
+constexpr double wx_harmonic = 1;
+constexpr double wy_harmonic = 100;
 inline void Simulation:: compute_force_Harmonic_Noisy(){
 
-    params.force.x = -2*params.position.x + sigma_harmonic*normal(twister);
-    params.force.y = -2*params.position.y + sigma_harmonic*normal(twister);
+    params.force.x = -2*wx_harmonic*params.position.x + sigma_harmonic*normal(twister);
+    params.force.y = -2*wy_harmonic*params.position.y + sigma_harmonic*normal(twister);
 
 }
