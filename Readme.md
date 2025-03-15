@@ -134,6 +134,7 @@ It has two local minima at $(\pm 3,0)$ and is symmetric about the two axes.
 
 ## Harmonic Oscillator (asymmetric)
 `--forcefield harmonic_asym`. 
+  
 A harmonic oscillator with different frequencies in the two dimensions. It has a unique minimum at $(0,0)$.
 
 $$ U(x,y)=x^2 + 100 y^2. $$
@@ -164,6 +165,7 @@ $$
 
 ## Rosenbrock
 `--forcefield rosenbrock`. 
+  
 The Rosenbrock potential is a famous landscape for optimization. It has a single minimum at $(1,1)$.
 
 $$ U(x,y) = (1-x)^2 + 100 (y-x^2)^2. $$
