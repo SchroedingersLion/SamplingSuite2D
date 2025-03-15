@@ -67,7 +67,7 @@ class Simulation{
 
 
             // Specify 2D problem to sample:
-            if (forcefield == "mullerbrown")     compute_force = &Simulation:: compute_force_MullerBrown;
+            if (forcefield == "muellerbrown")     compute_force = &Simulation:: compute_force_MullerBrown;
             else if (forcefield == "ackley")     compute_force = &Simulation:: compute_force_Ackley;
             else if (forcefield == "rosenbrock") compute_force = &Simulation:: compute_force_Rosenbrock;
             else if (forcefield == "rosenbrock_noisy") compute_force = &Simulation:: compute_force_Rosenbrock_Noisy;

@@ -14,7 +14,7 @@ const std:: string  _alpha1_default {"1"};
 const std:: string  _alpha2_default {"1"};
 const std:: string  _Sundman_m_default {"0.1"};
 const std:: string  _Sundman_M_default {"10"};
-const std:: string  _forcefield_default {"mullerbrown"};
+const std:: string  _forcefield_default {"muellerbrown"};
 const std:: string  _init_position_default {"0,0"};
 const std:: string  _init_velocity_default {"0,0"};
 const std:: string  _N_iteration_default{"10000"};
@@ -54,7 +54,7 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("alpha2",          "Hyperparameter alpha_2 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha2_default))
         ("sundman_m",       "Hyperparameter m (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_m_default))
         ("sundman_M",       "Hyperparameter M (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_M_default))           
-        ("forcefield",      "Forcefield. Allowed values 'mullerbrown', 'ackley'," 
+        ("forcefield",      "Forcefield. Allowed values 'muellerbrown', 'ackley'," 
                             "'rosenbrock', 'rosenbrock_noisy', 'beale', 'beale_noisy'," 
                              "'entropicbarrier', 'star', or 'harmonic_noisy'.",         cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
         ("init_position",   "Initial position. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_position_default))
