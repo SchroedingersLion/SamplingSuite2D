@@ -163,7 +163,7 @@ $$
 
 
 ## Rosenbrock
-`--forcefield rosenbrock`.
+`--forcefield rosenbrock`. 
 The Rosenbrock potential is a famous landscape for optimization. It has a single minimum at $(1,1)$.
 
 $$ U(x,y) = (1-x)^2 + 100 (y-x^2)^2. $$
