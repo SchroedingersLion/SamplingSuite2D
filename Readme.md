@@ -132,8 +132,17 @@ It has two local minima at $(\pm 3,0)$ and is symmetric about the two axes.
 ![Entropic Barrier plot](images/potential_entropic.png)
 
 
-## Mueller-Brown Potential
-`--forcefield mullerbrown`.
+## Harmonic Oscillator (asymmetric)
+`--forcefield harmonic_asym`.
+A harmonic oscillator with different frequencies in the two dimensions. It has a unique minimum at $(0,0)$.
+
+$$ U(x,y)=x^2 + 100 y^2. $$
+
+![harmonic_oscillator_asym_plot](images/harmonic_asym.png)
+
+
+## Mueller-Brown
+`--forcefield muellerbrown`.
 
 The Mueller-Brown potential has one deep valley and an adjacent higher plateau which holds two additional shallow valleys. It has three local minima and two saddle points.
 
@@ -150,9 +159,19 @@ c &= (-10, -10, -6.5, 0.7), \\
 \end{aligned}
 $$
 
-![Mueller-Brownplot](images/potential_muller_brown.png)
+![Mueller_Brown_plot](images/potential_muller_brown.png)
 
-## Star Potential
+
+## Rosenbrock
+`--forcefield rosenbrock`.
+The Rosenbrock potential is a famous landscape for optimization. It has a single minimum at $(1,1)$.
+
+$$ U(x,y) = (1-x)^2 + 100 (y-x^2)^2. $$
+
+![Rosenbrock_plot](images/potential_rosenbrock.png)
+
+
+## Star
 `--forcefield star`. 
 
 $$ U(x,y)=x^2+(1+1000x^2)y^2. $$
