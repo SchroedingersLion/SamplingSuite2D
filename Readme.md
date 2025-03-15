@@ -138,7 +138,7 @@ A harmonic oscillator with different frequencies in the two dimensions. It has a
 
 $$ U(x,y)=x^2 + 100 y^2. $$
 
-![harmonic_oscillator_asym_plot](images/harmonic_asym.png)
+![harmonic_oscillator_asym_plot](images/potential_harmonic_asym.png)
 
 
 ## Mueller-Brown
