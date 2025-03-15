@@ -37,7 +37,7 @@ class Simulation{
                    const std:: string& forcefield, 
                    const coordinate init_position, 
                    const coordinate init_velocity,
-                   const double sigma_harmonic,
+                   const double sigma_noise,
                    Measurement& results)
                 :   sampler {sampler},
                     stepsize {stepsize},
@@ -50,7 +50,7 @@ class Simulation{
                     burnin {burnin},
                     rng_seed {rng_seed},
                     forcefield {forcefield},
-                    sigma_harmonic {sigma_harmonic},                    
+                    sigma_noise {sigma_noise},                    
                     results {results}
         {
 
@@ -99,6 +99,7 @@ class Simulation{
         Measurement& results;
         const int rng_seed;
         std:: mt19937 twister;
+        const double sigma_noise;
         std:: normal_distribution<> normal{0,1};
         void (Simulation::* run_sampler)();
         void run_BAOAB();
@@ -112,12 +113,11 @@ class Simulation{
         void compute_force_MullerBrown();
         void compute_force_Ackley();
         void compute_force_Rosenbrock();
-        void compute_force_Beale();
-        void compute_force_EntropicBarrier();
         void compute_force_Rosenbrock_Noisy();
+        void compute_force_Beale();
         void compute_force_Beale_Noisy();
+        void compute_force_EntropicBarrier();
         void compute_force_StarPotential();
-        const double sigma_harmonic;
         void compute_force_Harmonic_Noisy();
 
 
@@ -414,16 +414,30 @@ inline void Simulation:: compute_force_Beale(){
 
 
 // Noisy Beale
-constexpr double sigma_beale {2};
+const size_t noise_freq {500000};
+size_t noise_ctr {1};
+bool noise_switch {0};
 inline void Simulation:: compute_force_Beale_Noisy(){
 
     y_sq = params.position.y*params.position.y;
+    
+    x_to_5 = params.position.x * params.position.x * params.position.x * params.position.x * params.position.x;
+    y_to_5 = y_sq * y_sq *params.position.y;
+    Beale_confined_exponential = exp( Beale_confined_a * (x_to_5*params.position.x + y_to_5*params.position.y) );
+
     Beale_var1 = 2*(1.5   - params.position.x + params.position.x*params.position.y);
     Beale_var2 = 2*(2.25  - params.position.x + params.position.x*y_sq);
     Beale_var3 = 2*(2.625 - params.position.x + params.position.x*y_sq*params.position.y);
 
-    params.force.x = -Beale_var1*(-1+params.position.y) - Beale_var2*(-1+y_sq) - Beale_var3*(-1+y_sq*params.position.y) + sigma_beale*normal(twister);
-    params.force.y = -params.position.x * (Beale_var1 + 2*params.position.y*Beale_var2 + 3*y_sq*Beale_var3) + sigma_beale*normal(twister);
+    params.force.x = -Beale_var1*(-1+params.position.y) - Beale_var2*(-1+y_sq) - Beale_var3*(-1+y_sq*params.position.y) - 6*Beale_confined_a*Beale_confined_b*x_to_5*Beale_confined_exponential;
+    params.force.y = -params.position.x * (Beale_var1 + 2*params.position.y*Beale_var2 + 3*y_sq*Beale_var3) - 6*Beale_confined_a*Beale_confined_b*y_to_5*Beale_confined_exponential;
+
+    // if (noise_switch){
+        params.force.x += sigma_noise*normal(twister);
+        params.force.y += sigma_noise*normal(twister);
+    // }
+    ++noise_ctr;
+    if (noise_ctr%noise_freq==0) noise_switch = !noise_switch;
 
 }
 
@@ -473,6 +487,6 @@ constexpr double wy_harmonic = 100;
 inline void Simulation:: compute_force_Harmonic_Noisy(){
 
     params.force.x = -2*wx_harmonic*params.position.x;
-    params.force.y = -2*wy_harmonic*params.position.y - params.position.y*sigma_harmonic*abs(normal(twister));
+    params.force.y = -2*wy_harmonic*params.position.y - params.position.y*sigma_noise*abs(normal(twister));
 
 }

@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
                     vals.forcefield, 
                    {vals.init_position[0],vals.init_position[1]}, 
                    {vals.init_velocity[0],vals.init_velocity[1]},
-                    vals.sigma_harmonic,
+                    vals.sigma_noise,
                     results);
     
     // Run simulation.
