@@ -150,6 +150,8 @@ c &= (-10, -10, -6.5, 0.7), \\
 \end{aligned}
 $$
 
+![Mueller-Brownplot](images/potential_muller_brown.png)
+
 ## Star Potential
 `--forcefield star`. 
 
