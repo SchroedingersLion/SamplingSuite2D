@@ -12,6 +12,8 @@ const std:: string  _temperature_default {"1"};
 const std:: string  _friction_default {"0.1"};
 const std:: string  _alpha1_default {"1"};
 const std:: string  _alpha2_default {"1"};
+const std:: string  _Sundman_m_default {"0.1"};
+const std:: string  _Sundman_M_default {"10"};
 const std:: string  _forcefield_default {"mullerbrown"};
 const std:: string  _init_position_default {"0,0"};
 const std:: string  _init_velocity_default {"0,0"};
@@ -49,7 +51,9 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("temperature",     "Temperature parameter in Langevin dynamics.",              cxxopts:: value <double>()->default_value(_temperature_default))
         ("friction",        "Friction parameter in Langevin dynamics.",                 cxxopts:: value <double>()->default_value(_friction_default))
         ("alpha1",          "Hyperparameter alpha_1 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha1_default))
-        ("alpha2",          "Hyperparameter alpha_2 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha2_default))        
+        ("alpha2",          "Hyperparameter alpha_2 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha2_default))
+        ("sundman_m",       "Hyperparameter m (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_m_default))
+        ("sundman_M",       "Hyperparameter M (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_M_default))           
         ("forcefield",      "Forcefield. Allowed values 'mullerbrown', 'ackley'," 
                             "'rosenbrock', 'rosenbrock_noisy', 'beale', 'beale_noisy'," 
                              "'entropicbarrier', 'star', or 'harmonic_noisy'.",         cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
@@ -63,7 +67,7 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("output_name",     "Name of the printed file holding the results.",            cxxopts:: value <std:: string>()->default_value(_output_name_default))               
         ("time_average",    "If flag is set, results will be time-averaged on the fly.",cxxopts:: value<bool>())
         ("sigma_noise",     "Standard deviation of Gaussian noise in the noisy"
-                            "force models.",                               cxxopts:: value<double>()->default_value(_sigma_noise_default))           
+                            " force models.",                                           cxxopts:: value<double>()->default_value(_sigma_noise_default))           
         ("help",            "Print help");
 
     // Parse command line.
@@ -78,6 +82,8 @@ struct ParsedValues{
     double friction;
     double alpha1;
     double alpha2;
+    double Sundman_m;
+    double Sundman_M;
     std:: string forcefield;
     std:: vector <double> init_position;
     std:: vector <double> init_velocity;
@@ -103,6 +109,8 @@ ParsedValues processParsedValues(const cxxopts:: ParseResult& result) {
     values.friction      = result.count("friction")      ? result["friction"].as<double>()                   : std:: stod(_friction_default);
     values.alpha1        = result.count("alpha1")        ? result["alpha1"].as<double>()                     : std:: stod(_alpha1_default);
     values.alpha2        = result.count("alpha2")        ? result["alpha2"].as<double>()                     : std:: stod(_alpha2_default);
+    values.Sundman_m     = result.count("sundman_m")     ? result["sundman_m"].as<double>()                  : std:: stod(_Sundman_m_default); 
+    values.Sundman_M     = result.count("sundman_M")     ? result["sundman_M"].as<double>()                  : std:: stod(_Sundman_M_default); 
     values.forcefield    = result.count("forcefield")    ? result["forcefield"].as<std:: string>()           : _forcefield_default;
     values.init_position = result.count("init_position") ? result["init_position"].as<std::vector<double>>() : std:: vector<double> {0,0};
     values.init_velocity = result.count("init_velocity") ? result["init_velocity"].as<std::vector<double>>() : std:: vector<double> {0,0};

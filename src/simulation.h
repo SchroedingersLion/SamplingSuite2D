@@ -30,6 +30,8 @@ class Simulation{
                    const double friction,
                    const double alpha1,
                    const double alpha2,
+                   const double Sundman_m,
+                   const double Sundman_M,
                    const int N_iteration,
                    const int t_meas,
                    const int burnin,
@@ -45,6 +47,8 @@ class Simulation{
                     friction {friction},
                     alpha1 {alpha1},
                     alpha2 {alpha2},
+                    Sundman_m {Sundman_m},
+                    Sundman_M {Sundman_M},
                     N_iteration {N_iteration},
                     t_meas {t_meas},
                     burnin {burnin},
@@ -108,6 +112,7 @@ class Simulation{
         void B_step(const double stepsize);
         void O_step(const double a_const1, const double a_const2);
         void Z_step(const double alpha_inv, const double exptau);
+        const double Sundman_M, Sundman_m;
         void Sundman_transform(const double stepsize);
         void (Simulation::* compute_force)();
         void compute_force_MullerBrown();
@@ -181,10 +186,10 @@ inline void Simulation:: Z_step(const double alpha_frac, const double exptau){
     params.zeta = exptau * params.zeta  +  alpha_frac * (1-exptau) * force_norm_sq;
 }
 
-const double M{10}, m{0.1}, r{0.25}; // leave them here for convenience.
+const double r{0.25}; 
 inline void Simulation:: Sundman_transform(const double stepsize){
     double zeta_r = pow(params.zeta, r); 
-    params.dt = stepsize  *  m * (zeta_r + M) / (zeta_r + m);    
+    params.dt = stepsize  *  Sundman_m * (zeta_r + Sundman_M) / (zeta_r + Sundman_m);    
 }
 
 
