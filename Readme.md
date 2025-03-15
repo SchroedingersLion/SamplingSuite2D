@@ -132,6 +132,16 @@ It has two local minima at $(\pm 3,0)$ and is symmetric about the two axes.
 ![Entropic Barrier plot](images/potential_entropic.png)
 
 
+## Mueller-Brown Potential
+`--forcefield mullerbrown`.
+
+The Mueller-Brown potential has one deep valley and an adjacent higher plateau which holds two additional shallow valleys. It has three local minima and two saddle points.
+
+$$ U(x,y) = \sum_{k=1}^{4} A_k \exp \Big[ a_k(x-\bar{x}_k)^2 + b_k(x-\bar{x}_k)(y-\bar{y}_k)+c_k(y-\bar{y}_k)^2 \Big], $$ 
+with 
+$$A=(-200, -100, -170, 15)$$
+
+
 ## Star Potential
 `--forcefield star`. 
 
