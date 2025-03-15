@@ -172,7 +172,7 @@ $$ U(x,y) = (1-x)^2 + 100 (y-x^2)^2. $$
 
 ![Rosenbrock_plot](images/potential_rosenbrock.png) 
 
-**Reference**
+**Reference**:  
 Rosenbrock, H.H. (1960). **An automatic method for finding the greatest or least value of a function**. The Computer Journal. 3 (3): 175–184.
 
 
