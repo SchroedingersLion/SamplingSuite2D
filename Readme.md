@@ -25,7 +25,7 @@ It can be easily modified in terms of adding new potentials, observables, and ev
     - [Mueller-Brown](#mueller-brown)
     - [Rosenbrock](#rosenbrock)
     - [Star](#star-potential)
-    - [How to add new potentials](#how-to-add-new-potentials)
+  - [How to add new potentials](#how-to-add-new-potentials)
   - [Observables](#observables)
     - [Change observables to collect](#change-observables-to-collect)
   - [Implemented Samplers](#implemented-samplers)
@@ -101,7 +101,7 @@ It has a minimum at $(0,0)$.
 **Reference**:  
 Ackley, D. H. (1987) **A connectionist machine for genetic hillclimbing**, Kluwer Academic Publishers, Boston MA. p. 13-14.
 
-## Beale
+### Beale
 `--forcefield beale`. 
 
 The Beale potential is given by 
@@ -118,7 +118,7 @@ Resulting potential:
 ![Beale potential](images/potential_beale.png)
 
 
-## Entropic Barrier
+### Entropic Barrier
 `--forcefield entropicbarrier`. 
 
 This potential connects two valleys through a channel. The main sampling difficulty does not come from an energy barrier but from the narrowness of the channel. 
@@ -130,7 +130,7 @@ It has two local minima at $(\pm 3,0)$ and is symmetric about the two axes.
 ![Entropic Barrier plot](images/potential_entropic.png)
 
 
-## Harmonic Oscillator (asymmetric)
+### Harmonic Oscillator (asymmetric)
 `--forcefield harmonic_asym`. 
   
 A harmonic oscillator with different frequencies in the two dimensions. It has a unique minimum at $(0,0)$.
@@ -140,7 +140,7 @@ $$ U(x,y)=x^2 + 100 y^2. $$
 ![harmonic_oscillator_asym_plot](images/potential_harmonic_asym.png)
 
 
-## Mueller-Brown
+### Mueller-Brown
 `--forcefield muellerbrown`.
 
 The Mueller-Brown potential is a famous model from computational chemistry for rare events. It has one deep valley and an adjacent higher plateau which holds two additional shallow valleys. It has three local minima and two saddle points.
@@ -161,7 +161,7 @@ $$
 ![Mueller_Brown_plot](images/potential_muller_brown.png)
 
 
-## Rosenbrock
+### Rosenbrock
 `--forcefield rosenbrock`. 
   
 The Rosenbrock potential is a famous landscape for optimization. It has a single minimum at $(1,1)$.
@@ -174,7 +174,7 @@ $$ U(x,y) = (1-x)^2 + 100 (y-x^2)^2. $$
 Rosenbrock, H.H. (1960). **An automatic method for finding the greatest or least value of a function**. The Computer Journal. 3 (3): 175–184.
 
 
-## Star
+### Star
 `--forcefield star`. 
 
 $$ U(x,y)=x^2+(1+1000x^2)y^2. $$
@@ -184,7 +184,7 @@ Minimum at $(0,0)$.
 ![Star plot](images/potential_star.png)
 
 
-### How to add new potentials
+## How to add new potentials
 It is straightforward to add new 2D potentials to the codebase.
 To see how it is done, open the `simulation.h` file and scroll down to the definitions of the force functions, e.g., `inline void Simulation:: compute_force_ackley()` for the Ackley force:
 ```c++
