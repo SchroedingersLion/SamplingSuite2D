@@ -98,7 +98,7 @@ $$U(x,y)=-20e^{-0.2 \sqrt{\frac{1}{2}(x^2+y^2)}} - e^{\frac{1}{2}\big(\cos(2\pi 
 
 It has a minimum at $(0,0)$.
 
-![Ackley potential](images/Ackley_plot.png)
+![Ackley potential](images/potential_ackley.png)
 
 **Reference**:  
 Ackley, D. H. (1987) **A connectionist machine for genetic hillclimbing**, Kluwer Academic Publishers, Boston MA. p. 13-14.
@@ -117,7 +117,7 @@ While the Beale function already leads to a normalizable density, we add an addi
 $$U_{\text{confining}}(x,y) = 0.3e^{10^{-5}(x^6+y^6)}. $$
 
 Resulting potential: 
-![Beale potential](images/Beale_plot.png)
+![Beale potential](images/potential_beale.png)
 
 
 ## Entropic Barrier
@@ -129,7 +129,7 @@ $$ U(x,y)= 100 \frac{y^2}{1+10x^4} + 0.001(x^2-9)^2. $$
 
 It has two local minima at $(\pm 3,0)$ and is symmetric about the two axes.
 
-![Entropic Barrier plot](images/EntropicChannel_plot.png)
+![Entropic Barrier plot](images/potential_entropic.png)
 
 
 ## Star Potential
@@ -139,10 +139,7 @@ $$ U(x,y)=x^2+(1+1000x^2)y^2. $$
 
 Minimum at $(0,0)$.
 
-<p align="center">
-    <img src="images/Star_plot.png" alt="Star plot" width="49%">
-    <img src="images/Star_density_plot.png" alt="Star density plot" width="49%">
-</p>
+![Star plot](images/potential_star.png)
 
 
 ### How to add new potentials
