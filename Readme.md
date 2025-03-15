@@ -145,7 +145,7 @@ $$ U(x,y)=x^2 + 100 y^2. $$
 ## Mueller-Brown
 `--forcefield muellerbrown`.
 
-The Mueller-Brown potential has one deep valley and an adjacent higher plateau which holds two additional shallow valleys. It has three local minima and two saddle points.
+The Mueller-Brown potential is a famous model from computational chemistry for rare events. It has one deep valley and an adjacent higher plateau which holds two additional shallow valleys. It has three local minima and two saddle points.
 
 $$ U(x,y) = \sum_{k=1}^{4} A_k \exp \Big[ a_k(x-\bar{x}_k)^2 + b_k(x-\bar{x}_k)(y-\bar{y}_k)+c_k(y-\bar{y}_k)^2 \Big], $$ 
 with 
@@ -170,7 +170,10 @@ The Rosenbrock potential is a famous landscape for optimization. It has a single
 
 $$ U(x,y) = (1-x)^2 + 100 (y-x^2)^2. $$
 
-![Rosenbrock_plot](images/potential_rosenbrock.png)
+![Rosenbrock_plot](images/potential_rosenbrock.png) 
+
+**Reference**
+Rosenbrock, H.H. (1960). **An automatic method for finding the greatest or least value of a function**. The Computer Journal. 3 (3): 175–184.
 
 
 ## Star
