@@ -35,7 +35,7 @@ Download the files in the /src folder. On Linux, using the Gnu Compiler Collecti
 via `mpicxx -O3 -o SamplingSuite2D main.cpp`.
 
 If you see an error that the header file `cxxopts.hpp` has not been found, it either means that this file is not in the default include folder or not present on your system at all.
-If you locate the file in a specific folder, either copy it to the default include folder (on Linux, this is typically /usr/include), or pass the `-I` compiler flag to specify additional include folders for the compiler to look at.
+If you locate the file in a specific folder, either copy it to the default include folder (on Linux, this is typically `/usr/include`), or pass the `-I` compiler flag to specify additional include folders for the compiler to look at.
 On Mac, this might be the `opt/homebrew/include` folder, so the compiler flag would be `-I/opt/homebrew/include`.
 If the header is missing alltogether, download it from https://github.com/jarro2783/cxxopts/tree/master/include and store it in your system's default include folder (or in an optional folder and then use the `-I` flag again).
 
