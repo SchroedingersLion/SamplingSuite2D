@@ -181,8 +181,9 @@ inline void Simulation:: O_step(const double a_const1, const double a_const2){
 }
 
 
+double force_norm_sq;
 inline void Simulation:: Z_step(const double alpha_frac, const double exptau){
-    double force_norm_sq {params.force.x * params.force.x  +  params.force.y * params.force.y};
+    force_norm_sq = params.force.x * params.force.x  +  params.force.y * params.force.y;
     params.zeta = exptau * params.zeta  +  alpha_frac * (1-exptau) * force_norm_sq;
 }
 
