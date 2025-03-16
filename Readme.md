@@ -23,6 +23,7 @@ It can be easily modified in terms of adding new potentials, observables, and ev
     - [Entropic Barrier](#entropic-barrier)
     - [Harmonic Oscillator (Asymmetric)](#harmonic-oscillator-asymmetric)
     - [Mueller-Brown](#mueller-brown)
+    - [Neal](#neals-funnel)
     - [Rosenbrock](#rosenbrock)
     - [Star](#star-potential)
   - [How to add new potentials](#how-to-add-new-potentials)
@@ -161,6 +162,19 @@ c &= (-10, -10, -6.5, 0.7), \\
 $$
 
 ![Mueller_Brown_plot](images/potential_muller_brown.png)
+
+
+### Neal's Funnel
+`--forcefield neal`.
+
+An exponentially narrowing potential with a minimum at $(0,0)$.  
+
+$$ U(x,y) = \frac{1}{2}x^2e^{-y} + \frac{1}{18}y^2.$$ 
+
+![Neal_plot](images/potential_neal.png) 
+
+**Reference**:  
+R. Neal. **Slice Sampling**. Annals of statistics, 705 (2003). 
 
 
 ### Rosenbrock
