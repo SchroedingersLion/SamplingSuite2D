@@ -67,16 +67,16 @@ class Simulation{
 
 
             // Specify 2D problem to sample:
-            if (forcefield == "muellerbrown")     compute_force = &Simulation:: compute_force_MullerBrown;
-            else if (forcefield == "ackley")     compute_force = &Simulation:: compute_force_Ackley;
-            else if (forcefield == "rosenbrock") compute_force = &Simulation:: compute_force_Rosenbrock;
-            else if (forcefield == "rosenbrock_noisy") compute_force = &Simulation:: compute_force_Rosenbrock_Noisy;
-            else if (forcefield == "beale")      compute_force = &Simulation:: compute_force_Beale;
-            else if (forcefield == "beale_noisy") compute_force = &Simulation:: compute_force_Beale_Noisy;
-            else if (forcefield == "entropicbarrier") compute_force = &Simulation:: compute_force_EntropicBarrier;
-            else if (forcefield == "star") compute_force = &Simulation:: compute_force_StarPotential;
-            else if (forcefield == "harmonic_asym") compute_force = &Simulation:: compute_force_Harmonic_Asymmetric;
-
+            if (forcefield == "muellerbrown")           compute_force = &Simulation:: compute_force_MullerBrown;
+            else if (forcefield == "ackley")            compute_force = &Simulation:: compute_force_Ackley;
+            else if (forcefield == "rosenbrock")        compute_force = &Simulation:: compute_force_Rosenbrock;
+            else if (forcefield == "rosenbrock_noisy")  compute_force = &Simulation:: compute_force_Rosenbrock_Noisy;
+            else if (forcefield == "beale")             compute_force = &Simulation:: compute_force_Beale;
+            else if (forcefield == "beale_noisy")       compute_force = &Simulation:: compute_force_Beale_Noisy;
+            else if (forcefield == "entropicbarrier")   compute_force = &Simulation:: compute_force_EntropicBarrier;
+            else if (forcefield == "star")              compute_force = &Simulation:: compute_force_StarPotential;
+            else if (forcefield == "harmonic_asym")     compute_force = &Simulation:: compute_force_Harmonic_Asymmetric;
+            else if (forcefield == "neal")              compute_force = &Simulation:: compute_force_NealFunnel;
             else throw std:: invalid_argument( "\nInvalid forcefield argument! See --help.\n" );
             
 
@@ -124,7 +124,7 @@ class Simulation{
         void compute_force_EntropicBarrier();
         void compute_force_StarPotential();
         void compute_force_Harmonic_Asymmetric();
-
+        void compute_force_NealFunnel();
 
 };
 
@@ -493,5 +493,17 @@ inline void Simulation:: compute_force_Harmonic_Asymmetric(){
 
     params.force.x = -2*wx_harmonic*params.position.x;
     params.force.y = -2*wy_harmonic*params.position.y - params.position.y*sigma_noise*abs(normal(twister));
+
+}
+
+
+double NealFunnel_expy;
+inline void Simulation:: compute_force_NealFunnel(){
+
+  NealFunnel_expy = exp(-params.position.y);
+
+  params.force.x = -params.position.x*NealFunnel_expy;
+
+  params.force.y = +0.5*(params.position.x*params.position.x)*NealFunnel_expy - params.position.y/9;
 
 }
