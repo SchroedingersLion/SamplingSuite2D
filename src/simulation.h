@@ -111,7 +111,7 @@ class Simulation{
         void A_step(const double stepsize);
         void B_step(const double stepsize);
         void O_step(const double a_const1, const double a_const2);
-        void Z_step(const double alpha_inv, const double exptau);
+        void Z_step(const double alpha_frac, const double exptau);
         const double Sundman_M, Sundman_m;
         void Sundman_transform(const double stepsize);
         void (Simulation::* compute_force)();
@@ -186,7 +186,7 @@ inline void Simulation:: Z_step(const double alpha_frac, const double exptau){
     params.zeta = exptau * params.zeta  +  alpha_frac * (1-exptau) * force_norm_sq;
 }
 
-const double r{0.25}; 
+constexpr double r{0.25}; 
 inline void Simulation:: Sundman_transform(const double stepsize){
     double zeta_r = pow(params.zeta, r); 
     params.dt = stepsize  *  Sundman_m * (zeta_r + Sundman_M) / (zeta_r + Sundman_m);    
