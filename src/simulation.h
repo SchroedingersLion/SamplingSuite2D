@@ -504,7 +504,6 @@ inline void Simulation:: compute_force_NealFunnel(){
   NealFunnel_expy = exp(-params.position.y);
 
   params.force.x = -params.position.x*NealFunnel_expy;
-
   params.force.y = +0.5*(params.position.x*params.position.x)*NealFunnel_expy - params.position.y/9;
 
 }
