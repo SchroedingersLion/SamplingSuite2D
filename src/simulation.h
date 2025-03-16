@@ -105,6 +105,7 @@ class Simulation{
         std:: mt19937 twister;
         const double sigma_noise;
         std:: normal_distribution<> normal{0,1};
+        void print_information();
         void (Simulation::* run_sampler)();
         void run_BAOAB();
         void run_ZBAOABZ();
@@ -130,6 +131,8 @@ class Simulation{
 
 
 inline void Simulation:: run_MPI_simulation(int argc, char *argv[]){
+
+    std:: cout << "Setting up MPI environment." << std:: endl;
 
     // Set up MPI environment
     MPI_Init(&argc, &argv);				
@@ -197,7 +200,7 @@ inline void Simulation:: Sundman_transform(const double stepsize){
 
 inline void Simulation:: run_BAOAB(){
 
-    std:: cout << "Running BAOAB" << std:: endl;
+    print_information();
 
     // INTEGRATOR CONSTANTS
     const double a = exp(-1*friction*stepsize);    
@@ -208,7 +211,7 @@ inline void Simulation:: run_BAOAB(){
     (this->*compute_force)();
 
     auto t1 = std:: chrono::high_resolution_clock::now();
-    std::cout<<"starting main loop"<<std::endl;
+    std::cout<<"Starting main loop."<<std::endl;
 
     // MAIN LOOP.
     for ( size_t i = 0;  i <= N_iteration;  ++i ) {
@@ -246,7 +249,7 @@ inline void Simulation:: run_BAOAB(){
 
 inline void Simulation:: run_ZBAOABZ(){
     
-    std:: cout << "Running ZBAOABZ" << std:: endl;
+    print_information();
 
     // INTEGRATOR CONSTANTS
     const double e_min_gamma {exp(-friction)};
@@ -270,7 +273,7 @@ inline void Simulation:: run_ZBAOABZ(){
     dt_half = 0.5*params.dt;
 
     auto t1 = std:: chrono::high_resolution_clock::now();
-    std::cout<<"starting main loop"<<std::endl;
+    std::cout<<"Starting main loop."<<std::endl;
 
     // MAIN LOOP
     for ( size_t i = 0;  i <= N_iteration;  ++i ) {
@@ -313,6 +316,20 @@ inline void Simulation:: run_ZBAOABZ(){
 
     return;
 }
+
+
+
+inline void Simulation:: print_information(){
+
+    std:: cout << "Running sampler '" << sampler << "' on forcefield '" << forcefield << "'"
+               << " for " << N_iteration << " iterations." << std:: endl;
+    std:: cout << "Temperature: " << temperature << ".\n"
+               << "Friction: " << friction << ".\n"
+               << "Stepsize: " << stepsize << ".\n";
+ 
+    return;
+
+} 
 
 
 
