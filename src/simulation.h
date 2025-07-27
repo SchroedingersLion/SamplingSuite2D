@@ -39,7 +39,6 @@ class Simulation{
                    const std:: string& forcefield, 
                    const coordinate init_position, 
                    const coordinate init_velocity,
-                   const double sigma_noise,
                    Measurement& results)
                 :   sampler {sampler},
                     stepsize {stepsize},
@@ -53,8 +52,7 @@ class Simulation{
                     t_meas {t_meas},
                     burnin {burnin},
                     rng_seed {rng_seed},
-                    forcefield {forcefield},
-                    sigma_noise {sigma_noise},                    
+                    forcefield {forcefield},                  
                     results {results}
         {
 
@@ -101,7 +99,6 @@ class Simulation{
         Measurement& results;
         const int rng_seed;
         std:: mt19937 twister;
-        const double sigma_noise;
         std:: normal_distribution<> normal{0,1};
         void print_information();
         void (Simulation::* run_sampler)();
@@ -450,7 +447,7 @@ constexpr double wy_harmonic = 100;
 inline void Simulation:: compute_force_Harmonic_Asymmetric(){
 
     params.force.x = -2*wx_harmonic*params.position.x;
-    params.force.y = -2*wy_harmonic*params.position.y - params.position.y*sigma_noise*abs(normal(twister));
+    params.force.y = -2*wy_harmonic*params.position.y;
 
 }
 
