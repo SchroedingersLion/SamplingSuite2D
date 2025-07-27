@@ -70,9 +70,7 @@ class Simulation{
             if (forcefield == "muellerbrown")           compute_force = &Simulation:: compute_force_MullerBrown;
             else if (forcefield == "ackley")            compute_force = &Simulation:: compute_force_Ackley;
             else if (forcefield == "rosenbrock")        compute_force = &Simulation:: compute_force_Rosenbrock;
-            else if (forcefield == "rosenbrock_noisy")  compute_force = &Simulation:: compute_force_Rosenbrock_Noisy;
             else if (forcefield == "beale")             compute_force = &Simulation:: compute_force_Beale;
-            else if (forcefield == "beale_noisy")       compute_force = &Simulation:: compute_force_Beale_Noisy;
             else if (forcefield == "entropicbarrier")   compute_force = &Simulation:: compute_force_EntropicBarrier;
             else if (forcefield == "star")              compute_force = &Simulation:: compute_force_StarPotential;
             else if (forcefield == "harmonic_asym")     compute_force = &Simulation:: compute_force_Harmonic_Asymmetric;
@@ -119,9 +117,7 @@ class Simulation{
         void compute_force_MullerBrown();
         void compute_force_Ackley();
         void compute_force_Rosenbrock();
-        void compute_force_Rosenbrock_Noisy();
         void compute_force_Beale();
-        void compute_force_Beale_Noisy();
         void compute_force_EntropicBarrier();
         void compute_force_StarPotential();
         void compute_force_Harmonic_Asymmetric();
@@ -421,36 +417,6 @@ inline void Simulation:: compute_force_Beale(){
 
 
 
-// Noisy Beale.
-const size_t noise_freq {500000};
-size_t noise_ctr {1};
-bool noise_switch {0};
-inline void Simulation:: compute_force_Beale_Noisy(){
-
-    y_sq = params.position.y*params.position.y;
-    
-    x_to_5 = params.position.x * params.position.x * params.position.x * params.position.x * params.position.x;
-    y_to_5 = y_sq * y_sq *params.position.y;
-    Beale_confined_exponential = exp( Beale_confined_a * (x_to_5*params.position.x + y_to_5*params.position.y) );
-
-    Beale_var1 = 2*(1.5   - params.position.x + params.position.x*params.position.y);
-    Beale_var2 = 2*(2.25  - params.position.x + params.position.x*y_sq);
-    Beale_var3 = 2*(2.625 - params.position.x + params.position.x*y_sq*params.position.y);
-
-    params.force.x = -Beale_var1*(-1+params.position.y) - Beale_var2*(-1+y_sq) - Beale_var3*(-1+y_sq*params.position.y) - 6*Beale_confined_a*Beale_confined_b*x_to_5*Beale_confined_exponential;
-    params.force.y = -params.position.x * (Beale_var1 + 2*params.position.y*Beale_var2 + 3*y_sq*Beale_var3) - 6*Beale_confined_a*Beale_confined_b*y_to_5*Beale_confined_exponential;
-
-    // if (noise_switch){
-        params.force.x += sigma_noise*normal(twister);
-        params.force.y += sigma_noise*normal(twister);
-    // }
-    ++noise_ctr;
-    if (noise_ctr%noise_freq==0) noise_switch = !noise_switch;
-
-}
-
-
-
 // Entropic Channel.
 double EntropicBarrier_x2;
 double EntropicBarrier_denominator;
@@ -463,20 +429,6 @@ inline void Simulation:: compute_force_EntropicBarrier(){
     params.force.x = 4000 * (EntropicBarrier_x2*params.position.x*params.position.y*params.position.y) / (EntropicBarrier_denominator*EntropicBarrier_denominator) - 0.004*(EntropicBarrier_x2-9)*params.position.x;
 
     params.force.y = -200 * params.position.y / EntropicBarrier_denominator;
-
-}
-
-
-
-// Noisy Rosenbrock.
-constexpr double sigma_rosenbrock {2};
-inline void Simulation:: compute_force_Rosenbrock_Noisy(){
-
-    params.force.x = 400*params.position.x*(params.position.y - params.position.x*params.position.x)
-                     + 2*(1-params.position.x)
-                     + sigma_rosenbrock*normal(twister);
-    
-    params.force.y = -200*(params.position.y - params.position.x*params.position.x) + sigma_rosenbrock*normal(twister);
 
 }
 

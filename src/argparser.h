@@ -23,7 +23,6 @@ const std:: string  _n_dist_default {"1"};
 const std:: string  _burnin_default {"0"};
 const std:: string  _seed_default {"1"};
 const std:: string  _output_name_default {"results.csv"};
-const std:: string  _sigma_noise_default {"1"};
 
 
 std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc, char* argv[]) {
@@ -54,9 +53,9 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("alpha2",          "Hyperparameter alpha_2 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha2_default))
         ("sundman_m",       "Hyperparameter m (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_m_default))
         ("sundman_M",       "Hyperparameter M (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_M_default))           
-        ("forcefield",      "Forcefield. Allowed values 'muellerbrown', 'ackley'," 
-                            "'rosenbrock', 'rosenbrock_noisy', 'beale', 'beale_noisy'," 
-                             "'entropicbarrier', 'star', 'neal', or 'harmonic_asym'.",  cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
+        ("forcefield",      "Forcefield. Allowed values are 'muellerbrown', 'ackley'," 
+                            "'rosenbrock', 'beale', 'entropicbarrier'," 
+                             "'star', 'neal', or 'harmonic_asym'.",                     cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
         ("init_position",   "Initial position. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_position_default))
         ("init_velocity",   "Initial velocity. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_velocity_default))
         ("N_iteration",     "Number of simulation steps.",                              cxxopts:: value <int>()->default_value(_N_iteration_default))
@@ -65,9 +64,7 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("burnin",          "Start taking measurements only after burnin iterations.",  cxxopts:: value <int>()->default_value(_burnin_default))
         ("seed",            "Randomseed.",                                              cxxopts:: value <int>()->default_value(_seed_default))
         ("output_name",     "Name of the printed file holding the results.",            cxxopts:: value <std:: string>()->default_value(_output_name_default))               
-        ("time_average",    "If flag is set, results will be time-averaged on the fly.",cxxopts:: value<bool>())
-        ("sigma_noise",     "Standard deviation of Gaussian noise in the noisy"
-                            " force models.",                                           cxxopts:: value<double>()->default_value(_sigma_noise_default))           
+        ("time_average",    "If flag is set, results will be time-averaged on the fly.",cxxopts:: value<bool>())       
         ("help",            "Print help");
 
     // Parse command line.
@@ -94,7 +91,6 @@ struct ParsedValues{
     int seed;
     std:: string output_name;
     bool time_average;
-    double sigma_noise;
 };
 
 
@@ -121,7 +117,6 @@ ParsedValues processParsedValues(const cxxopts:: ParseResult& result) {
     values.seed          = result.count("seed")          ? result["seed"].as<int>()                          : std:: stoi(_seed_default);
     values.output_name   = result.count("output_name")   ? result["output_name"].as<std::string>()           : _output_name_default;
     values.time_average  = result.count("time_average");
-    values.sigma_noise   = result.count("sigma_noise") ? result["sigma_noise"].as<double>()           : std:: stod(_sigma_noise_default);
 
     return values;
 }
