@@ -134,7 +134,7 @@ inline void Simulation:: run_MPI_simulation(int argc, char *argv[]){
 
     std:: cout << "Setting up MPI environment." << std:: endl;
 
-    // Set up MPI environment
+    // Set up MPI environment.
     MPI_Init(&argc, &argv);				
     MPI_Comm comm = MPI_COMM_WORLD;
     int rank, nr_proc;
@@ -142,7 +142,7 @@ inline void Simulation:: run_MPI_simulation(int argc, char *argv[]){
     MPI_Comm_size(comm, &nr_proc);
 
 
-    // Seed RNG with mpi rank
+    // Seed RNG with mpi rank.
     const int seed = rank + rng_seed;
 
     std:: seed_seq seq{1,20,3200,403,5*seed+1,12000,73667,9474+seed,19151-seed};
@@ -151,7 +151,7 @@ inline void Simulation:: run_MPI_simulation(int argc, char *argv[]){
     twister.seed(seeds.at(0)); 
 
 
-    // Run sampler
+    // Run sampler.
     (this->*run_sampler)();
 
     results.mpi_reduction(comm, rank, nr_proc);
@@ -202,12 +202,12 @@ inline void Simulation:: run_BAOAB(){
 
     print_information();
 
-    // INTEGRATOR CONSTANTS
+    // INTEGRATOR CONSTANTS.
     const double a = exp(-1*friction*stepsize);    
     const double sqrt_Ta_sq = sqrt((1-a*a)*temperature);
     const double stepsize_half = 0.5*stepsize;   
 
-    // COMPUTE INITIAL FORCES
+    // COMPUTE INITIAL FORCES.
     (this->*compute_force)();
 
     auto t1 = std:: chrono::high_resolution_clock::now();
@@ -216,7 +216,7 @@ inline void Simulation:: run_BAOAB(){
     // MAIN LOOP.
     for ( size_t i = 0;  i <= N_iteration;  ++i ) {
 
-        // TAKE MEASUREMENT
+        // TAKE MEASUREMENT.
         if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(params);
 
         B_step(stepsize_half);         
@@ -236,7 +236,7 @@ inline void Simulation:: run_BAOAB(){
 	}  // END MAIN LOOP
 
 
-    // FINALIZE
+    // FINALIZE.
     auto t2 = std:: chrono:: high_resolution_clock:: now();
     auto ms_int = std:: chrono:: duration_cast < std:: chrono:: seconds > (t2 - t1);
     std:: cout << "Execution took " << ms_int.count() << " seconds!\n";
@@ -251,7 +251,7 @@ inline void Simulation:: run_ZBAOABZ(){
     
     print_information();
 
-    // INTEGRATOR CONSTANTS
+    // INTEGRATOR CONSTANTS.
     const double e_min_gamma {exp(-friction)};
     const double exptau_half{exp(-alpha1*0.5*stepsize)};
     double sqrt_Ta_sq;
@@ -261,36 +261,36 @@ inline void Simulation:: run_ZBAOABZ(){
     double dt_half;
     double force_norm_sq;
 
-    // COMPUTE INITIAL FORCES
+    // COMPUTE INITIAL FORCES.
     (this->*compute_force)();
 
-    // INIT ZETA
+    // INIT ZETA.
     force_norm_sq = params.force.x*params.force.x + params.force.y*params.force.y;
     params.zeta = force_norm_sq; 
 
-    // OBTAIN FIRST ADAPTIVE STEP SIZE
+    // OBTAIN FIRST ADAPTIVE STEP SIZE.
     Sundman_transform(stepsize);
     dt_half = 0.5*params.dt;
 
     auto t1 = std:: chrono::high_resolution_clock::now();
     std::cout<<"Starting main loop."<<std::endl;
 
-    // MAIN LOOP
+    // MAIN LOOP.
     for ( size_t i = 0;  i <= N_iteration;  ++i ) {
         
-        // TAKE MEASUREMENT
+        // TAKE MEASUREMENT.
         if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(params);
 
         Z_step(alpha_frac, exptau_half);
 
-        Sundman_transform(stepsize);    // update step size
+        Sundman_transform(stepsize);    // Update step size.
         dt_half = 0.5*params.dt;
 
         B_step(dt_half);
 
         A_step(dt_half);
 
-        a = pow(e_min_gamma, params.dt);       // update constants for O-step with new dt
+        a = pow(e_min_gamma, params.dt);       // Update constants for O-step with new dt.
         sqrt_Ta_sq = sqrt((1-a*a)*temperature);
         O_step(a, sqrt_Ta_sq);
 
@@ -302,7 +302,7 @@ inline void Simulation:: run_ZBAOABZ(){
   
         Z_step(alpha_frac, exptau_half);
 
-        Sundman_transform(stepsize);     // update step size
+        Sundman_transform(stepsize);     // Update step size.
 		
         if( i % int(1e6) == 0 ) std:: cout << "Iteration " << i << " done!" << "\n";
 	
@@ -333,9 +333,9 @@ inline void Simulation:: print_information(){
 
 
 
-// FORCES
+// FORCES.
 
-// MullerBrown
+// MullerBrown.
 const std:: vector <double> MullerBrown_A {-200, -100, -170, 15};  
 const std:: vector <double> MullerBrown_a {-1, -1, -6.5, 0.7};
 const std:: vector <double> MullerBrown_b {0, 0, 11, 0.6};
@@ -362,7 +362,8 @@ inline void Simulation:: compute_force_MullerBrown(){
 }
 
 
-// Ackley
+
+// Ackley.
 const double Ackley_2pi {2*M_PI};
 double Ackley_distconst;
 double Ackley_x, Ackley_y;
@@ -384,7 +385,8 @@ inline void Simulation:: compute_force_Ackley(){
 }
 
 
-// Rosenbrock
+
+// Rosenbrock.
 inline void Simulation:: compute_force_Rosenbrock(){
 
     params.force.x = 400*params.position.x*(params.position.y - params.position.x*params.position.x)
@@ -396,24 +398,7 @@ inline void Simulation:: compute_force_Rosenbrock(){
 
 
 
-// Beale
-// double Beale_var1, Beale_var2, Beale_var3;
-// double y_sq;
-
-// inline void Simulation:: compute_force_Beale(){
-
-//     y_sq = params.position.y*params.position.y;
-//     Beale_var1 = 2*(1.5   - params.position.x + params.position.x*params.position.y);
-//     Beale_var2 = 2*(2.25  - params.position.x + params.position.x*y_sq);
-//     Beale_var3 = 2*(2.625 - params.position.x + params.position.x*y_sq*params.position.y);
-
-//     params.force.x = -Beale_var1*(-1+params.position.y) - Beale_var2*(-1+y_sq) - Beale_var3*(-1+y_sq*params.position.y);
-//     params.force.y = -params.position.x * (Beale_var1 + 2*params.position.y*Beale_var2 + 3*y_sq*Beale_var3);
-
-// }
-
-
-// Beale confined
+// Beale confined.
 double Beale_var1, Beale_var2, Beale_var3;
 double y_sq, x_to_5, y_to_5, Beale_confined_exponential;
 constexpr double Beale_confined_a {0.00001}, Beale_confined_b {0.3};
@@ -436,7 +421,7 @@ inline void Simulation:: compute_force_Beale(){
 
 
 
-// Noisy Beale
+// Noisy Beale.
 const size_t noise_freq {500000};
 size_t noise_ctr {1};
 bool noise_switch {0};
@@ -466,8 +451,7 @@ inline void Simulation:: compute_force_Beale_Noisy(){
 
 
 
-
-// Entropic Channel
+// Entropic Channel.
 double EntropicBarrier_x2;
 double EntropicBarrier_denominator;
 
@@ -484,7 +468,7 @@ inline void Simulation:: compute_force_EntropicBarrier(){
 
 
 
-// Noisy Rosenbrock
+// Noisy Rosenbrock.
 constexpr double sigma_rosenbrock {2};
 inline void Simulation:: compute_force_Rosenbrock_Noisy(){
 
@@ -498,6 +482,7 @@ inline void Simulation:: compute_force_Rosenbrock_Noisy(){
 
 
 
+// Star Potential.
 inline void Simulation:: compute_force_StarPotential(){
 
     params.force.x = -2*params.position.x - 2000*params.position.x*params.position.y*params.position.y;
@@ -505,6 +490,9 @@ inline void Simulation:: compute_force_StarPotential(){
 
 }
 
+
+
+// Asymmetric Harmonic Oscillator.
 constexpr double wx_harmonic = 1;
 constexpr double wy_harmonic = 100;
 inline void Simulation:: compute_force_Harmonic_Asymmetric(){
@@ -515,6 +503,8 @@ inline void Simulation:: compute_force_Harmonic_Asymmetric(){
 }
 
 
+
+// Neal's Funnel.
 double NealFunnel_expy;
 inline void Simulation:: compute_force_NealFunnel(){
 

@@ -2,7 +2,7 @@
 
 #include "parameters.h"
 #include "measurement.h"
-#include "simulation.h"   // specifies force function as well as which obervables to take
+#include "simulation.h"   
 #include "argparser.h"
 
 

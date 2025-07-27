@@ -5,7 +5,7 @@
 #include <iostream>
 #include "cxxopts.hpp"
 
-// DEFAULT PARAMETERS
+// DEFAULT PARAMETERS.
 const std:: string  _sampler_default {"baoab"};
 const std:: string  _stepsize_default {"0.1"};
 const std:: string  _temperature_default {"1"};

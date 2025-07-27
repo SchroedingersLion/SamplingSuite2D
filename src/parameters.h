@@ -7,7 +7,7 @@ struct coordinate{
 
 struct parameters{
     coordinate position, velocity, force;
-    double zeta, dt;    // used only by SamAdams.
+    double zeta, dt;    // Used only by ZBAOABZ.
 };
 
 

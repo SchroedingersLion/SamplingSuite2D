@@ -13,7 +13,7 @@ class Measurement {
 
     public:
 
-        // constructor
+        // Constructor.
         Measurement (const int method_type, 
                      const int burnin, 
                      const int t_meas, 
@@ -44,7 +44,7 @@ class Measurement {
 
                 observable_tavgs = std:: vector <std:: vector <float>> (no_observables, std::vector <float> (no_elements));
 
-                // the adaptive schemes also collect the adaptive step sizes.
+                // For the daptive schemes, also collect the adaptive step sizes.
                 if (method_type==1){ 
                     dt_tavg.resize(no_elements);
                     dt_vals_raw.resize(no_elements);
@@ -61,10 +61,10 @@ class Measurement {
                The number of entries in vector "observables" must correspond to member variable "no_observables" set by the user
                in the constructor above. The reweighting for the adaptive schemes is done automatically by the "process_sample" routine. 
                The adaptive schemes will also automatically store the adaptive step size and the \zeta variable. */            
-            observables[0] = params.position.x;	// x-coordinate
-            observables[1] = params.position.y;  // y-coordinate
-            observables[2] = 0.5*(params.velocity.x*params.velocity.x + params.velocity.y*params.velocity.y);   // Tkin
-            observables[3] = -0.5*(params.position.x*params.force.x + params.position.y*params.force.y);        // Tconf
+            observables[0] = params.position.x;	 // x-coordinate.
+            observables[1] = params.position.y;  // y-coordinate.
+            observables[2] = 0.5*(params.velocity.x*params.velocity.x + params.velocity.y*params.velocity.y);  // Tkin.
+            observables[3] = -0.5*(params.position.x*params.force.x + params.position.y*params.force.y);       // Tconf.
             /*########################################################################*/
 
             /*################# ENTER NAMES OF OBSERVABLES (WILL BE HEADER OF OUTPUTFILE)####*/
@@ -74,41 +74,41 @@ class Measurement {
             col_names[3] = "Tconf";
             /*################################################################################*/
 
-            process_sample(params);   // compute (reweighted) time average and stores results for later print-out.
+            process_sample(params);  // Compute (reweighted) time average and stores results for later print-out.
 
             return;
 
         };
 
 
-        void mpi_reduction(MPI_Comm& comm, const int& rank, const int& nr_proc);  // for mpi average, implemented in .cpp file.
-        void print_to_csv();                         // for print out, implemented in .cpp file.
+        void mpi_reduction(MPI_Comm& comm, const int& rank, const int& nr_proc);  // Perform mpi average, implemented in .cpp file.
+        void print_to_csv();  // Print results to file, implemented in .cpp file.
 
 
     private:
-        std:: vector <double> observable_sums;          // sum of observable samples for time average
-        std:: vector <double> observables;              // vector storing the new sample (one entry per observable)
-        std:: vector <std:: string> col_names;          // names of the columns in the output file (names of the observables).
-        std:: vector <std:: vector <float>> observable_tavgs;       // store the evolving time average for each observable
-        std:: vector <std:: vector <float>> observable_printout;    // store the mpi process average of vector "observable_tavgs" on rank 0 
+        std:: vector <double> observable_sums;          // Store sum of observable samples for time average.
+        std:: vector <double> observables;              // Store the new sample (one entry per observable).
+        std:: vector <std:: string> col_names;          // Names of the columns in the output file (names of the observables).
+        std:: vector <std:: vector <float>> observable_tavgs;       // Store the evolving time average for each observable.
+        std:: vector <std:: vector <float>> observable_printout;    // Store the mpi process average of vector "observable_tavgs" on rank 0. 
         std:: vector <float> dt_tavg;
         std:: vector <float> dt_printout;
-        std:: vector <float> dt_vals_raw;              // store samples of adaptive step size (only for adaptive schemes)
-        std:: vector <float> zeta_raw;                 // store samples of zeta (only for adaptive schemes)                 
-        int no_observables;                             // number of observables to be taken
-        const int method_type;                          // 0=constant step size scheme, 1=adaptive scheme
-        const bool time_average;                        // decide whether observables will be time-averaged
-        int k{0}, ctr{0}, t_avg_normalizer{0};          // help variables
+        std:: vector <float> dt_vals_raw;               // Samples of adaptive step size (only for adaptive schemes).
+        std:: vector <float> zeta_raw;                  // Samples of zeta (only for adaptive schemes)                 
+        int no_observables;                             // Number of observables to be taken
+        const int method_type;                          // 0 = constant step size scheme, 1 = adaptive scheme.
+        const bool time_average;                        // Decide whether observables will be time-averaged.
+        int k{0}, ctr{0}, t_avg_normalizer{0};          // Help variables.
         const int burnin, t_meas, n_dist, N_iteration;     
         double dt_sum{0}; 
         const std:: string output_name;                              
-        void process_sample(const parameters& params);   // add new sample to time average and store result, implemented in .cpp file.
+        void process_sample(const parameters& params);   // Add new sample to time average and store result, implemented in .cpp file.
 
 };
 
 
 
-// implementation of measurement class routines that the user does not need to modify.
+// Implementation of measurement class routines that the user does not need to modify.
 
 inline void Measurement:: process_sample(const parameters& parameters){
 
@@ -167,9 +167,9 @@ inline void Measurement:: process_sample(const parameters& parameters){
 }
 
 
-inline void Measurement:: mpi_reduction(MPI_Comm& comm, const int& rank, const int& nr_proc){   // MPI AVERAGE ROUTINE
+inline void Measurement:: mpi_reduction(MPI_Comm& comm, const int& rank, const int& nr_proc){   // MPI AVERAGE ROUTINE.
     
-    // resize output array to store averaged results in
+    // Resize output array to store averaged results in.
     observable_printout.resize(no_observables);
     const int row_size = observable_tavgs[0].size();
     if (rank==0){
@@ -177,13 +177,13 @@ inline void Measurement:: mpi_reduction(MPI_Comm& comm, const int& rank, const i
         if (method_type==1) dt_printout.resize( row_size );
     }
 
-    // collect results from processes
+    // Collect results from processes.
     for (size_t i=0; i<no_observables; ++i) MPI_Reduce( &observable_tavgs[i][0], &observable_printout[i][0], row_size, MPI_FLOAT, MPI_SUM, 0, comm);  
     if (method_type==1) MPI_Reduce( &dt_tavg[0], &dt_printout[0], row_size, MPI_FLOAT, MPI_SUM, 0, comm );
 
     if( rank==0 ){
         for (size_t j=0;  j<row_size; ++j){
-            for (size_t i=0; i<no_observables; ++i) observable_printout[i][j] /= nr_proc;     // divide by no. of processes to obtain averages
+            for (size_t i=0; i<no_observables; ++i) observable_printout[i][j] /= nr_proc;     // Divide by no. of processes to obtain averages.
             if (method_type==1) dt_printout[j] /= nr_proc;
         }
     }
@@ -205,7 +205,7 @@ inline void Measurement:: print_to_csv(){
     if (method_type==1) file << "dt(avg) dt(raw) zeta(raw) "; 
     file << "\n";
 
-    // annoying logic to obtain first iteration index at which observable will be printed to file 
+    // Annoying logic to obtain first iteration index at which observable will be printed to file 
     // (depends on variables burnin, t_meas, and n_dist).
     int first_index;  
     if (burnin >= t_meas) first_index = (burnin % t_meas) == 0  ?  burnin :  burnin - (burnin % t_meas) + t_meas;
@@ -215,7 +215,7 @@ inline void Measurement:: print_to_csv(){
 
 
 
-    // print results to file
+    // Print results to file.
     for ( size_t i = 0; i<observable_printout[0].size(); ++i )
     {
         file << first_index + i*t_meas*n_dist;
