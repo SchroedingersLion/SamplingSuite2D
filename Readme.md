@@ -349,15 +349,7 @@ The BAOAB integrator is a 5-step splitting scheme of weak second order and is kn
 It is particularly accurate at larger frictions REF.  
 
 The 5 partial steps that make up a whole integrator transition are given by:
-$$
-\begin{aligned}
-p_{n+\frac 1 2} &= p_n - \frac{\Delta t} {2} \nabla U(q_n), \qquad \text{B-step,} \\
-q_{n+\frac 1 2} &= q_n + \frac{\Delta t} {2} p_n, \qquad \text{A-step,} \\
-p_{n+\frac 1 2}^{*} &= a_1 p_{n+\frac 1 2} + a_2 R_n, \qquad \text{O-step,} \\
-q_{n+1} &= q_{n+\frac 1 2}  + \frac{\Delta t} {2} p_{n+\frac 1 2}^{*}, \qquad \text{A-step,} \\
-p_{n+1} &= p_{n+\frac 1 2}^{*} - \frac{\Delta t} {2} \nabla U(q_{n+1}), \qquad \text{B-step,},
-\end{aligned}
-$$
+<img width="2788" height="1698" alt="BAOAB" src="https://github.com/user-attachments/assets/c8ce9b44-a666-4e1f-bb40-909b7b0611b4" />
 with $a_1=e^{-\gamma \Delta t}, a_2=\sqrt{\beta^{-1}(1-a_1^2)}$, and $R_n$ is a random vector for which each component is independently drawn from a standard normal distribution.
 
 ### How to add new samplers
