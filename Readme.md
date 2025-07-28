@@ -350,7 +350,7 @@ It is particularly accurate at larger frictions REF.
 
 The 5 partial steps that make up a whole integrator transition are given by:  
 <img width="40%" alt="BAOAB" src="https://github.com/user-attachments/assets/c8ce9b44-a666-4e1f-bb40-909b7b0611b4" />  
-with $a_1:=\exp(-\gamma \Delta t),  a_2:=\sqrt{\beta^{-1}(1-a_1^2)}$, and $R_n$ is a random vector for which each component is independently drawn from a standard normal distribution.
+with $a_1:=\exp(-\gamma \Delta t)$,  $a_2:=\sqrt{\beta^{-1}(1-a_1^2)}$, and $R_n$ is a random vector for which each component is independently drawn from a standard normal distribution.
 
 ### How to add new samplers
 ... to be continued.
