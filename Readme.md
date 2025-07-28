@@ -344,7 +344,7 @@ Then save the file and recompile the code.
 
 ## Implemented Samplers
 ### BAOAB
-`--sampler baoab`.
+`--sampler baoab`.  
 The BAOAB integrator is a 5-step splitting scheme of weak second order and is known to be highly accurate for the computation of configurational observables.  
 It is particularly accurate at larger frictions.  
 
@@ -353,7 +353,8 @@ The 5 partial steps that make up a whole integrator transition are given by:
 with $a_1:=\exp(-\gamma \Delta t)$,  $a_2:=\sqrt{\beta^{-1}(1-a_1^2)}$, and $R_n$ is a random vector for which each component is independently drawn from a standard normal distribution.  
 
 **Reference**:  
-B. Leimkuhler & C. Matthews. **Rational Construction of Stochastic Numerical Methods for Molecular Sampling**. Applied Mathematics Research eXpress (2012).
+B. Leimkuhler & C. Matthews. **Rational Construction of Stochastic Numerical Methods for Molecular Sampling**.  
+Applied Mathematics Research eXpress (2012).
 
 ### ZBAOABZ
 `--sampler zbaoabz`.
