@@ -345,7 +345,7 @@ Then save the file and recompile the code.
 ## Implemented Samplers
 ### BAOAB
 `--sampler baoab`.  
-The BAOAB integrator is a 5-step splitting scheme of weak second order and is known to be highly accurate for the computation of configurational observables.  
+The BAOAB integrator is a 5-step splitting scheme of weak second order and is known to be highly accurate for the computation of configurational observables. 
 It is particularly accurate at larger frictions.  
 
 The 5 partial steps that make up a whole integrator transition are given by:  
