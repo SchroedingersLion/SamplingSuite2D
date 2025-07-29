@@ -53,8 +53,8 @@ Full list of options:
 | --stepsize arg |  float > 0 | Stepsize used by sampler. |
 | --temperature arg | float > 0 | Temperature used by sampler.|
 | --friction arg |  float > 0   | Friction used by sampler.|
-| --alpha1 arg   |  float > 0   | Alpha1 hyperparameter used only by ZBAOABZ.|
-| --alpha2 arg   |  float > 0   | Alpha2 hyperparameter used only by ZBAOABZ.|
+| --alpha arg    |  float > 0   | Alpha hyperparameter used only by ZBAOABZ.|
+| --omega arg    |  float > 0   | Omega hyperparameter used only by ZBAOABZ.|
 | --sundman_m arg|  float > 0   | m hyperparameter used only by ZBAOABZ.|
 | --sundman_M arg|  float > 0   | M hyperparameter used only by ZBAOABZ.|
 | --forcefield arg | string   | Forcefield / potential to use (see below).|
