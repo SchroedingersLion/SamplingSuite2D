@@ -366,8 +366,13 @@ $$
 \zeta_{n+\frac 1 2} = \rho \zeta_n + \frac {1} {\alpha} (1-\rho) g(q_n,p_n),
 $$
 
-with $\rho=\exp(-\alpha \frac {\Delta \tau} {2})$ and monitor function $g(q,p)=\Omega ^{-1} \|\nabla U(q_n)\|^2$ with scaling factor $\Omega>0$. This dynamics computes a moving average over (the recent history) of the monitor function, where $\alpha$ governs how quickly the past is forgotten and $\Omega$ decides the overall magnitude of $\zeta$ for a given series of experienced forces.  
-After a Z-step, the stepsize $\Delta t$ is adjusted according to 
+with $\rho=\exp(-\alpha \frac {\Delta \tau} {2})$ and monitor function 
+
+$$g(q,p)=\Omega ^{-1} \|\nabla U(q)\|^2,$$
+
+with scaling factor $\Omega>0$.  
+This dynamics computes a moving average over (the recent history) of the monitor function, where $\alpha$ governs how quickly the past is forgotten and $\Omega$ decides the overall magnitude of $\zeta$ for a given series of experienced forces.  
+After a Z-step, the stepsize $\Delta t$ is adjusted according to  
 $$
 \Delta t = \psi(\zeta) \Delta \tau, 
 $$
