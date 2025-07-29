@@ -372,10 +372,7 @@ $$
 with scaling factor $\Omega>0$.  
 This dynamics computes a moving average over (the recent history) of the monitor function, where $\alpha$ governs how quickly the past is forgotten and $\Omega$ decides the overall magnitude of $\zeta$ for a given series of experienced forces.  
 After a Z-step, the stepsize $\Delta t$ is adjusted according to  
-
-$$
-\Delta t = \psi(\zeta) \Delta \tau, 
-$$
+$$\Delta t = \psi(\zeta) \Delta \tau, $$
 where $\Delta \tau$ is the base stepsize and the Sundman transform kernel $\psi(\zeta)$ corresponds to $\psi^{(1)}$ in the reference below. This ensures $\Delta t \in (m \Delta \tau, M \Delta \tau]$ with $0<m<M$. 
 Once the new stepsize has been computed, a BAOAB transition at this stepsize is executed, followed by another Z-step.  
 
