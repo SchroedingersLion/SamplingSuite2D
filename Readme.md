@@ -365,6 +365,7 @@ A single integrator step consists of two Z-steps wrapped around a conventional B
 $$
 \zeta_{n+\frac 1 2} = \rho \zeta_n + \frac {1} {\alpha} (1-\rho) g(q_n,p_n),
 $$
+
 with $\rho=\exp(-\alpha \frac {\Delta \tau} {2})$ and monitor function  
 
 $$
