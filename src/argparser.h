@@ -10,8 +10,8 @@ const std:: string  _sampler_default {"baoab"};
 const std:: string  _stepsize_default {"0.1"};
 const std:: string  _temperature_default {"1"};
 const std:: string  _friction_default {"0.1"};
-const std:: string  _alpha1_default {"1"};
-const std:: string  _alpha2_default {"1"};
+const std:: string  _alpha_default {"1"};
+const std:: string  _omega_default {"1"};
 const std:: string  _Sundman_m_default {"0.1"};
 const std:: string  _Sundman_M_default {"10"};
 const std:: string  _forcefield_default {"muellerbrown"};
@@ -49,8 +49,8 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("stepsize",        "Simulation stepsize.",                                     cxxopts:: value <double>()->default_value(_stepsize_default))
         ("temperature",     "Temperature parameter in Langevin dynamics.",              cxxopts:: value <double>()->default_value(_temperature_default))
         ("friction",        "Friction parameter in Langevin dynamics.",                 cxxopts:: value <double>()->default_value(_friction_default))
-        ("alpha1",          "Hyperparameter alpha_1 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha1_default))
-        ("alpha2",          "Hyperparameter alpha_2 (only used by ZBAOABZ)",            cxxopts:: value <double>()->default_value(_alpha2_default))
+        ("alpha",           "Hyperparameter alpha (only used by ZBAOABZ)",              cxxopts:: value <double>()->default_value(_alpha_default))
+        ("omega",           "Hyperparameter omega (only used by ZBAOABZ)",              cxxopts:: value <double>()->default_value(_omega_default))
         ("sundman_m",       "Hyperparameter m (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_m_default))
         ("sundman_M",       "Hyperparameter M (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_M_default))           
         ("forcefield",      "Forcefield. Allowed values are 'muellerbrown', 'ackley'," 
@@ -77,8 +77,8 @@ struct ParsedValues{
     double stepsize;
     double temperature;
     double friction;
-    double alpha1;
-    double alpha2;
+    double alpha;
+    double omega;
     double Sundman_m;
     double Sundman_M;
     std:: string forcefield;
@@ -103,8 +103,8 @@ ParsedValues processParsedValues(const cxxopts:: ParseResult& result) {
     values.stepsize      = result.count("stepsize")      ? result["stepsize"].as<double>()                   : std:: stod(_stepsize_default);
     values.temperature   = result.count("temperature")   ? result["temperature"].as<double>()                : std:: stod(_temperature_default);
     values.friction      = result.count("friction")      ? result["friction"].as<double>()                   : std:: stod(_friction_default);
-    values.alpha1        = result.count("alpha1")        ? result["alpha1"].as<double>()                     : std:: stod(_alpha1_default);
-    values.alpha2        = result.count("alpha2")        ? result["alpha2"].as<double>()                     : std:: stod(_alpha2_default);
+    values.alpha         = result.count("alpha")         ? result["alpha"].as<double>()                      : std:: stod(_alpha_default);
+    values.omega         = result.count("omega")         ? result["omega"].as<double>()                      : std:: stod(_omega_default);
     values.Sundman_m     = result.count("sundman_m")     ? result["sundman_m"].as<double>()                  : std:: stod(_Sundman_m_default); 
     values.Sundman_M     = result.count("sundman_M")     ? result["sundman_M"].as<double>()                  : std:: stod(_Sundman_M_default); 
     values.forcefield    = result.count("forcefield")    ? result["forcefield"].as<std:: string>()           : _forcefield_default;

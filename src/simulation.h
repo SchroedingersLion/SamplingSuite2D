@@ -28,8 +28,8 @@ class Simulation{
                    const double stepsize,
                    const double temperature,
                    const double friction,
-                   const double alpha1,
-                   const double alpha2,
+                   const double alpha,
+                   const double omega,
                    const double Sundman_m,
                    const double Sundman_M,
                    const int N_iteration,
@@ -44,8 +44,8 @@ class Simulation{
                     stepsize {stepsize},
                     temperature {temperature},
                     friction {friction},
-                    alpha1 {alpha1},
-                    alpha2 {alpha2},
+                    alpha {alpha},
+                    omega {omega},
                     Sundman_m {Sundman_m},
                     Sundman_M {Sundman_M},
                     N_iteration {N_iteration},
@@ -90,8 +90,8 @@ class Simulation{
         const double stepsize;
         const double friction;
         const double temperature;
-        const double alpha1;
-        const double alpha2;
+        const double alpha;
+        const double omega;
         const std:: string forcefield;
         const int N_iteration;
         const int t_meas;
@@ -107,7 +107,7 @@ class Simulation{
         void A_step(const double stepsize);
         void B_step(const double stepsize);
         void O_step(const double a_const1, const double a_const2);
-        void Z_step(const double alpha_frac, const double exptau);
+        void Z_step(const double alpha_omega, const double exptau);
         const double Sundman_M, Sundman_m;
         void Sundman_transform(const double stepsize);
         void (Simulation::* compute_force)();
@@ -178,9 +178,9 @@ inline void Simulation:: O_step(const double a_const1, const double a_const2){
 
 
 double force_norm_sq;
-inline void Simulation:: Z_step(const double alpha_frac, const double exptau){
+inline void Simulation:: Z_step(const double alpha_omega, const double exptau){
     force_norm_sq = params.force.x * params.force.x  +  params.force.y * params.force.y;
-    params.zeta = exptau * params.zeta  +  alpha_frac * (1-exptau) * force_norm_sq;
+    params.zeta = exptau * params.zeta  +  alpha_omega * (1-exptau) * force_norm_sq;
 }
 
 constexpr double r{0.25}; 
@@ -246,11 +246,11 @@ inline void Simulation:: run_ZBAOABZ(){
 
     // INTEGRATOR CONSTANTS.
     const double e_min_gamma {exp(-friction)};
-    const double exptau_half{exp(-alpha1*0.5*stepsize)};
+    const double exptau_half{exp(-alpha*0.5*stepsize)};
     double sqrt_Ta_sq;
     double a;
 
-    const double alpha_frac {alpha2/alpha1};
+    const double alpha_omega {1/(alpha*omega)};
     double dt_half;
     double force_norm_sq;
 
@@ -274,7 +274,7 @@ inline void Simulation:: run_ZBAOABZ(){
         // TAKE MEASUREMENT.
         if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(params);
 
-        Z_step(alpha_frac, exptau_half);
+        Z_step(alpha_omega, exptau_half);
 
         Sundman_transform(stepsize);    // Update step size.
         dt_half = 0.5*params.dt;
@@ -293,7 +293,7 @@ inline void Simulation:: run_ZBAOABZ(){
 
         B_step(dt_half);
   
-        Z_step(alpha_frac, exptau_half);
+        Z_step(alpha_omega, exptau_half);
 
         Sundman_transform(stepsize);     // Update step size.
 		
