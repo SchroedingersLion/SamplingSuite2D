@@ -360,7 +360,8 @@ Applied Mathematics Research eXpress (2012).
 `--sampler zbaoabz`.
 ZBAOABZ is an integrator for the SamAdams dynamics which corresponds to Langevin Dynamics with adaptive stepsizes. The stepsize $\Delta t$ is adjusted dependent on a 
 moving average over the force norms $\Vert \nabla U(q_n)\Vert^2$, reducing the stepsize in areas of large forces and increasing it in areas of small forces.  
-A single integrator step consists of two Z-steps wrapped around a conventional BAOAB transition. The Z-steps evolve an artifical variable $\zeta$ according to
+A single integrator step consists of two Z-steps wrapped around a conventional BAOAB transition. The Z-steps evolve an artifical variable $\zeta$ according to  
+
 $$
 \zeta_{n+\frac 1 2} = \rho \zeta_n + \frac {1} {\alpha} (1-\rho) g(q_n,p_n),
 $$
@@ -369,10 +370,15 @@ with $\rho=\exp(-\alpha \frac {\Delta \tau} {2})$ and monitor function
 $$
 g(q,p)=\Omega ^{-1} \Vert \nabla U(q)\Vert^2,
 $$
+
 with scaling factor $\Omega>0$.  
 This dynamics computes a moving average over (the recent history) of the monitor function, where $\alpha$ governs how quickly the past is forgotten and $\Omega$ decides the overall magnitude of $\zeta$ for a given series of experienced forces.  
 After a Z-step, the stepsize $\Delta t$ is adjusted according to  
-$$\Delta t = \psi(\zeta) \Delta \tau, $$
+
+$$
+\Delta t = \psi(\zeta) \Delta \tau, 
+$$
+
 where $\Delta \tau$ is the base stepsize and the Sundman transform kernel $\psi(\zeta)$ corresponds to $\psi^{(1)}$ in the reference below. This ensures $\Delta t \in (m \Delta \tau, M \Delta \tau]$ with $0<m<M$. 
 Once the new stepsize has been computed, a BAOAB transition at this stepsize is executed, followed by another Z-step.  
 
