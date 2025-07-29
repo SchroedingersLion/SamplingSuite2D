@@ -360,16 +360,12 @@ Applied Mathematics Research eXpress (2012).
 `--sampler zbaoabz`.
 ZBAOABZ is an integrator for the SamAdams dynamics which corresponds to Langevin Dynamics with adaptive stepsizes. The stepsize $\Delta t$ is adjusted dependent on a 
 moving average over the force norms $\|\nabla U(q_n)\|^2$, reducing the stepsize in areas of large forces and increasing it in areas of small forces.  
-A single integrator step consists of two Z-steps wrapped around a conventional BAOAB transition. The Z-steps evolve an artifical variable $\zeta$ according to
-
+A single integrator step consists of two Z-steps wrapped around a conventional BAOAB transition. The Z-steps evolve an artifical variable $\zeta$ according to  
 $$
 \zeta_{n+\frac 1 2} = \rho \zeta_n + \frac {1} {\alpha} (1-\rho) g(q_n,p_n),
 $$
-
-with $\rho=\exp(-\alpha \frac {\Delta \tau} {2})$ and monitor function 
-
-$$g(q,p)=\Omega ^{-1} \|\nabla U(q)\|^2,$$
-
+with $\rho=\exp(-\alpha \frac {\Delta \tau} {2})$ and monitor function  
+$$g(q,p)=\Omega ^{-1} \left\|\nabla U(q)\right\|^2,$$
 with scaling factor $\Omega>0$.  
 This dynamics computes a moving average over (the recent history) of the monitor function, where $\alpha$ governs how quickly the past is forgotten and $\Omega$ decides the overall magnitude of $\zeta$ for a given series of experienced forces.  
 After a Z-step, the stepsize $\Delta t$ is adjusted according to  
