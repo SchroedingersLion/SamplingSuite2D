@@ -388,7 +388,7 @@ The hyperparameters $\alpha$, $\Omega$, $\Delta \tau$, $m$, and $M$ can be passe
 **Reference**:  
 B. Leimkuhler, R. Lohmann, and P.A. Whalley.  
 **A Langevin sampling algorithm inspired by the Adam optimizer**.  
-*ArXiv* preprint [arxiv.org/abs/2504.18911](https://arxiv.org/abs/2504.18911) (2015).
+*ArXiv* preprint [arxiv.org/abs/2504.18911](https://arxiv.org/abs/2504.18911) (2025).
 
 ### How to add new samplers
 ... to be continued
