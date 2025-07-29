@@ -357,7 +357,7 @@ B. Leimkuhler & C. Matthews. **Rational Construction of Stochastic Numerical Met
 Applied Mathematics Research eXpress (2012).
 
 ### ZBAOABZ
-`--sampler zbaoabz`.
+`--sampler zbaoabz`.  
 ZBAOABZ is an integrator for the SamAdams dynamics which corresponds to Langevin Dynamics with adaptive stepsizes. The stepsize $\Delta t$ is adjusted dependent on a 
 moving average over the force norms $\Vert \nabla U(q_n)\Vert^2$, reducing the stepsize in areas of large forces and increasing it in areas of small forces.  
 A single integrator step consists of two Z-steps wrapped around a conventional BAOAB transition. The Z-steps evolve an artifical variable $\zeta$ according to
@@ -380,7 +380,7 @@ $$
 \Delta t = \psi(\zeta) \Delta \tau, 
 $$
 
-where $\Delta \tau$ is the base stepsize and the Sundman transform kernel $\psi(\zeta)$ corresponds to $\psi^{(1)}$ in the reference below. This ensures $\Delta t \in (m \Delta \tau, M \Delta \tau]$ with $0<m<M$. 
+where $\Delta \tau$ is the base stepsize and the Sundman transform kernel $\psi(\zeta)$ corresponds to $\psi^{(1)}$ in the reference below. This ensures $\Delta t \in (m \Delta \tau, M \Delta \tau]$ with $0<m<M$.  
 Once the new stepsize has been computed, a BAOAB transition at this stepsize is executed, followed by another Z-step.  
 
 The hyperparameters $\alpha$, $\Omega$, $\Delta \tau$, $m$, and $M$ can be passed as command line flags, where one can often use the default values for $m$ and $M$. 
