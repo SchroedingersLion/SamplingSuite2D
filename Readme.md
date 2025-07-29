@@ -376,7 +376,7 @@ After a Z-step, the stepsize $\Delta t$ is adjusted according to
 $$
 \Delta t = \psi(\zeta) \Delta \tau, 
 $$
-where $\Delta \tau$ is the base stepsize and the Sundman transform kernel $\psi(\zeta)$ corresponds to $\psi^{(1)} in the reference below. This ensures $\Delta t \in (m \Delta \tau, M \Delta \tau]$ with $0<m<M$. 
+where $\Delta \tau$ is the base stepsize and the Sundman transform kernel $\psi(\zeta)$ corresponds to $\psi^{(1)}$ in the reference below. This ensures $\Delta t \in (m \Delta \tau, M \Delta \tau]$ with $0<m<M$. 
 Once the new stepsize has been computed, a BAOAB transition at this stepsize is executed, followed by another Z-step.  
 
 The hyperparameters $\alpha$, $\Omega$, $\Delta \tau$, $m$, and $M$ can be passed as command line flags, where one can often use the default values for $m$ and $M$. 
