@@ -386,8 +386,9 @@ Once the new stepsize has been computed, a BAOAB transition at this stepsize is 
 The hyperparameters $\alpha$, $\Omega$, $\Delta \tau$, $m$, and $M$ can be passed as command line flags, where one can often use the default values for $m$ and $M$. 
 
 **Reference**:  
-B. Leimkuhler, R. Lohmann, and P.A. Whalley. **A Langevin sampling algorithm inspired by the Adam optimizer**.  
-ArXiv preprint [arxiv.org/abs/2504.18911](https://arxiv.org/abs/2504.18911) (2015).
+B. Leimkuhler, R. Lohmann, and P.A. Whalley.  
+**A Langevin sampling algorithm inspired by the Adam optimizer**.  
+*ArXiv* preprint [arxiv.org/abs/2504.18911](https://arxiv.org/abs/2504.18911) (2015).
 
 ### How to add new samplers
 ... to be continued
