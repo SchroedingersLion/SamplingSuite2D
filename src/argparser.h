@@ -45,7 +45,7 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
 
     // Define command line options.
     options.add_options()
-        ("sampler",         "Sampler run ('baoab' or 'zbaoabz').",                      cxxopts:: value <std:: string>()->default_value(_sampler_default))
+        ("sampler",         "Sampler to run ('euler', 'baoab' or 'zbaoabz').",          cxxopts:: value <std:: string>()->default_value(_sampler_default))
         ("stepsize",        "Simulation stepsize.",                                     cxxopts:: value <double>()->default_value(_stepsize_default))
         ("temperature",     "Temperature parameter in Langevin dynamics.",              cxxopts:: value <double>()->default_value(_temperature_default))
         ("friction",        "Friction parameter in Langevin dynamics.",                 cxxopts:: value <double>()->default_value(_friction_default))
@@ -53,7 +53,7 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
         ("omega",           "Hyperparameter omega (only used by ZBAOABZ)",              cxxopts:: value <double>()->default_value(_omega_default))
         ("sundman_m",       "Hyperparameter m (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_m_default))
         ("sundman_M",       "Hyperparameter M (only used by ZBAOABZ)",                  cxxopts:: value <double>()->default_value(_Sundman_M_default))           
-        ("forcefield",      "Forcefield. Allowed values are 'muellerbrown', 'ackley'," 
+        ("forcefield",      "Forcefield. Allowed values are 'muellerbrown', 'doublewell', 'ackley'," 
                             "'rosenbrock', 'beale', 'entropicbarrier'," 
                             "'star', 'neal', or 'harmonic_asym'.",                      cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
         ("init_position",   "Initial position. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_position_default))

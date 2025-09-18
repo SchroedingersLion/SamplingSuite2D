@@ -60,12 +60,14 @@ class Simulation{
             params.velocity = init_velocity;
 
             if (sampler == "baoab")        run_sampler = &Simulation:: run_BAOAB;
+            else if (sampler == "euler")   run_sampler = &Simulation:: run_EulerMaruyama;
             else if (sampler == "zbaoabz") run_sampler = &Simulation:: run_ZBAOABZ;               
             else throw std:: invalid_argument( "\nInvalid sampler argument! See --help.\n" );
 
 
             // Specify 2D problem to sample:
             if (forcefield == "muellerbrown")           compute_force = &Simulation:: compute_force_MullerBrown;
+            else if (forcefield == "doublewell")        compute_force = &Simulation:: compute_force_DoubleWell;
             else if (forcefield == "ackley")            compute_force = &Simulation:: compute_force_Ackley;
             else if (forcefield == "rosenbrock")        compute_force = &Simulation:: compute_force_Rosenbrock;
             else if (forcefield == "beale")             compute_force = &Simulation:: compute_force_Beale;
@@ -104,6 +106,7 @@ class Simulation{
         void (Simulation::* run_sampler)();
         void run_BAOAB();
         void run_ZBAOABZ();
+        void run_EulerMaruyama();
         void A_step(const double stepsize);
         void B_step(const double stepsize);
         void O_step(const double a_const1, const double a_const2);
@@ -112,6 +115,7 @@ class Simulation{
         void Sundman_transform(const double stepsize);
         void (Simulation::* compute_force)();
         void compute_force_MullerBrown();
+        void compute_force_DoubleWell();
         void compute_force_Ackley();
         void compute_force_Rosenbrock();
         void compute_force_Beale();
@@ -312,6 +316,48 @@ inline void Simulation:: run_ZBAOABZ(){
 
 
 
+inline void Simulation:: run_EulerMaruyama(){
+    
+    print_information();
+
+    // INTEGRATOR CONSTANTS.  
+    const double sqrt_const = sqrt(2*friction*temperature*stepsize);
+
+    // COMPUTE INITIAL FORCES.
+    (this->*compute_force)();
+
+    auto t1 = std:: chrono::high_resolution_clock::now();
+    std::cout<<"Starting main loop."<<std::endl;
+
+    // MAIN LOOP.
+    for ( size_t i = 0;  i <= N_iteration;  ++i ) {
+
+        // TAKE MEASUREMENT.
+        if( i % t_meas == 0  &&  i >= burnin) results.take_measurement(params);
+
+        params.position.x += stepsize * params.velocity.x;
+        params.position.y += stepsize * params.velocity.y;
+
+        (this->*compute_force)();
+
+        params.velocity.x += (params.force.x - friction*params.velocity.x)*stepsize + sqrt_const*normal(twister);
+        params.velocity.y += (params.force.y - friction*params.velocity.y)*stepsize + sqrt_const*normal(twister);
+  
+        if( i % int(1e6) == 0 ) std:: cout << "Iteration " << i << " done!" << "\n";
+	
+	}  // END MAIN LOOP
+
+
+    // FINALIZE.
+    auto t2 = std:: chrono:: high_resolution_clock:: now();
+    auto ms_int = std:: chrono:: duration_cast < std:: chrono:: seconds > (t2 - t1);
+    std:: cout << "Execution took " << ms_int.count() << " seconds!\n";
+
+    return;
+
+}
+
+
 inline void Simulation:: print_information(){
 
     std:: cout << "Running sampler '" << sampler << "' on forcefield '" << forcefield << "'"
@@ -353,6 +399,17 @@ inline void Simulation:: compute_force_MullerBrown(){
     }
 
 }
+
+
+const double DoubleWell_a {1.25};
+const double DoubleWell_a2 {DoubleWell_a * DoubleWell_a};
+inline void Simulation:: compute_force_DoubleWell(){
+
+    params.force.x = -4*params.position.x * (params.position.x*params.position.x - DoubleWell_a2);
+    params.force.y = -params.position.y;
+
+}
+
 
 
 

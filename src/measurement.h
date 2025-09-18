@@ -31,7 +31,7 @@ class Measurement {
             {
                 
                 /*######## ENTER THE NUMBER OF OBSERVABLES TO COLLECT ############*/
-                no_observables = 4; 
+                no_observables = 5; 
                 /*################################################################*/
                 
 
@@ -65,6 +65,7 @@ class Measurement {
             observables[1] = params.position.y;  // y-coordinate.
             observables[2] = 0.5*(params.velocity.x*params.velocity.x + params.velocity.y*params.velocity.y);  // Tkin.
             observables[3] = -0.5*(params.position.x*params.force.x + params.position.y*params.force.y);       // Tconf.
+            observables[4] = params.position.x < 1 ? 1 : 0; 
             /*########################################################################*/
 
             /*################# ENTER NAMES OF OBSERVABLES (WILL BE HEADER OF OUTPUTFILE)####*/
@@ -72,6 +73,7 @@ class Measurement {
             col_names[1] = "y";
             col_names[2] = "Tkin";
             col_names[3] = "Tconf";
+            col_names[4] = "Occupation_probability";
             /*################################################################################*/
 
             process_sample(params);  // Compute (reweighted) time average and stores results for later print-out.
