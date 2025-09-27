@@ -19,7 +19,7 @@ class Measurement {
                      const int t_meas, 
                      const int n_dist,
                      const bool time_average, 
-                     const int N_iteration,
+                     const long long N_iteration,
                      const std:: string output_name):
                      method_type {method_type}, 
                      burnin {burnin}, 
@@ -39,7 +39,7 @@ class Measurement {
                 observable_sums.resize(no_observables);
                 col_names.resize(no_observables);
 
-                int no_elements {(N_iteration-burnin) / (n_dist*t_meas)+1}; // Number of elements needed in the t-averaged results vector.
+                long long no_elements {(N_iteration-burnin) / (n_dist*t_meas)+1}; // Number of elements needed in the t-averaged results vector.
                 if (no_elements<0) throw std:: invalid_argument( "\n Combination of N_iteration, burnin, n_dist, and t_meas makes no sense. Is N_iter < burnin? \n" );
 
                 observable_tavgs = std:: vector <std:: vector <float>> (no_observables, std::vector <float> (no_elements));
@@ -101,7 +101,8 @@ class Measurement {
         const int method_type;                          // 0 = constant step size scheme, 1 = adaptive scheme.
         const bool time_average;                        // Decide whether observables will be time-averaged.
         int k{0}, ctr{0}, t_avg_normalizer{0};          // Help variables.
-        const int burnin, t_meas, n_dist, N_iteration;     
+        const int burnin, t_meas, n_dist; 
+        const long long N_iteration;     
         double dt_sum{0}; 
         const std:: string output_name;                              
         void process_sample(const parameters& params);   // Add new sample to time average and store result, implemented in .cpp file.

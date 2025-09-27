@@ -58,7 +58,7 @@ std:: pair <cxxopts:: ParseResult, cxxopts:: Options> parseCommandLine(int argc,
                             "'star', 'neal', or 'harmonic_asym'.",                      cxxopts:: value <std:: string>()->default_value(_forcefield_default))         
         ("init_position",   "Initial position. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_position_default))
         ("init_velocity",   "Initial velocity. Enter two comma-separated floats.",      cxxopts:: value<std::vector<double>>()->default_value(_init_velocity_default))
-        ("N_iteration",     "Number of simulation steps.",                              cxxopts:: value <int>()->default_value(_N_iteration_default))
+        ("N_iteration",     "Number of simulation steps.",                              cxxopts:: value <long long>()->default_value(_N_iteration_default))
         ("t_meas",          "Take a measurement any 't_meas' iterations.",              cxxopts:: value <int>()->default_value(_t_meas_default))
         ("n_dist",          "Print any n_dist TAKEN measurements to output file.",      cxxopts:: value <int>()->default_value(_n_dist_default))
         ("burnin",          "Start taking measurements only after burnin iterations.",  cxxopts:: value <int>()->default_value(_burnin_default))
@@ -84,7 +84,7 @@ struct ParsedValues{
     std:: string forcefield;
     std:: vector <double> init_position;
     std:: vector <double> init_velocity;
-    int N_iteration;
+    long long N_iteration;
     int t_meas;
     int n_dist;
     int burnin;
@@ -110,7 +110,7 @@ ParsedValues processParsedValues(const cxxopts:: ParseResult& result) {
     values.forcefield    = result.count("forcefield")    ? result["forcefield"].as<std:: string>()           : _forcefield_default;
     values.init_position = result.count("init_position") ? result["init_position"].as<std::vector<double>>() : std:: vector<double> {0,0};
     values.init_velocity = result.count("init_velocity") ? result["init_velocity"].as<std::vector<double>>() : std:: vector<double> {0,0};
-    values.N_iteration   = result.count("N_iteration")   ? result["N_iteration"].as<int>()                   : std:: stoi(_N_iteration_default);
+    values.N_iteration   = result.count("N_iteration")   ? result["N_iteration"].as<long long>()             : std:: stoi(_N_iteration_default);
     values.t_meas        = result.count("t_meas")        ? result["t_meas"].as<int>()                        : std:: stoi(_t_meas_default);
     values.n_dist        = result.count("n_dist")        ? result["n_dist"].as<int>()                        : std:: stoi(_n_dist_default);
     values.burnin        = result.count("burnin")        ? result["burnin"].as<int>()                        : std:: stoi(_burnin_default);

@@ -32,7 +32,7 @@ class Simulation{
                    const double omega,
                    const double Sundman_m,
                    const double Sundman_M,
-                   const int N_iteration,
+                   const long long N_iteration,
                    const int t_meas,
                    const int burnin,
                    const int rng_seed,
@@ -95,7 +95,7 @@ class Simulation{
         const double alpha;
         const double omega;
         const std:: string forcefield;
-        const int N_iteration;
+        const long long N_iteration;
         const int t_meas;
         const int burnin;
         Measurement& results;
