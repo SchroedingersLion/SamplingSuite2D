@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <mpi.h>
+#include <iostream> 
 #include "parameters.h"
 
 
