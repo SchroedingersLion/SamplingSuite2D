@@ -1,4 +1,5 @@
 # SamplingSuite2D
+[![DOI](https://zenodo.org/badge/902489471.svg)](https://doi.org/10.5281/zenodo.22072351) <br>
 This repository holds the source code of the SamplingSuite2D, which aims at sampling 2-dimensional surfaces using Langevin Dynamics-based integrators in a highly efficient and extensible framework.
 
 The code can be compiled from source, executed from the command line, and run on arbitrarily many processes thanks to the Message-Passing Interface (MPI).
