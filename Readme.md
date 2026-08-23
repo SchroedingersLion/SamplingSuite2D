@@ -35,10 +35,10 @@ It can be easily modified in terms of adding new potentials, observables, and ev
 
 ## Compile
 You need to be able to compile MPI-based C++ programs.
-Download the files in the `/src` folder (or clone the repo). On Linux, using the Gnu Compiler Collection (gcc) with the MPI implementation provided by OpenMPI, compilation is invoked
+Download the files in the `/src` folder (or clone the repository). On Linux, using the Gnu Compiler Collection (gcc) with the MPI implementation provided by OpenMPI, compilation is invoked
 via `mpicxx -O3 -o SamplingSuite2D main.cpp`.
 
-If you receive errors such as `a space is required between consecutive right angle brackets`, it indicates that you compile against a C++ standard that is too old. In that case, try to add the compiler flag `-std=c++17`.
+If you receive errors such as `a space is required between consecutive right angle brackets`, it indicates that you compile against an outdated C++ standard. In that case, try to add the compiler flag `-std=c++17`.
 
 Successful compilation creates the executable `SamplingSuite2D`.
 
@@ -70,25 +70,24 @@ Full list of options:
 
 Note that all options are optional and have default values. Run `./SamplingSuite2D --help` for more information.
 
-Note that the user is responsible for choosing admissible initial conditions (e.g., don't start in a forcefield singularity) and pick meaningful hyperparameters (e.g., don't use negative temperatures). 
+Note also that the user is responsible for choosing admissible initial conditions (e.g., not starting in a forcefield singularity) and picking meaningful hyperparameters (e.g., not prescribing negative temperatures). 
 
 ## Averaging Behavior
 There are several modes of possible averaging behaviors:
 ### No averaging
-If you want to draw a single trajectory and take observable measurements along the way without any kind of average, run the code with only one MPI process and do not pass the `time_average` flag.
+To draw a single trajectory and take observable measurements along the way without any kind of average, run the code with only one MPI process, and do not pass the `time_average` flag.
 ### Trajectory average
-If you want to average results over multiple independent trajectories, run the code with multiple MPI processes. The output file will then contain the inter-trajectory averages.
+To average results over multiple independent trajectories, run the code with multiple MPI processes. The output file will then contain the inter-trajectory averages.
 ### Time average
-If you want the trajectories to be time-averaged (in terms of a moving average along the given trajectory), pass the `time_average` flag (without argument). The output file will then contain time-averaged observables.
+To obtain time-averaged results (in terms of a moving average along the given trajectory), pass the `time_average` flag (without argument). The output file will then contain time-averaged observables.
 The time average behavior can be fine-controlled with the `t_meas` flag. The observables will be measured any `t_meas` iterations and added to the moving average. 
 Whether the moving average will be printed to the output file at each of these time points also depends on the flag `n_dist`. Only any `n_dist` times the moving average was updated will it be printed to output (that way, the accuracy of the moving average can be increased without increasing the size of the output file). In case of no time averaging, `n_dist` should simply remain `1` (the default value).
 
 
 ## Implemented Potentials 
 The potential $U(x,y)$ to sample is governed by passing the `--forcefield` flag with an admissible argument (e.g., `--forcefield ackley` for the Ackley potential).
-For a list of shipped potentials, run `./SamplingSuite2D --help`. 
- 
-Note that some of these potentials do not lead to normalizable densities $\propto e^{-\beta U(x,y)}$. These landscapes can still be of interest to test optimizers or examine trapping or rare-event transitions.
+The corresponding probability density is of the canonical shape, i.e., $\propto e^{-\beta U(x,y)}$. Note, however, that some of the available potentials do not lead to normalizable densities. These landscapes can still be of interest to test optimizers on, or to examine trapping and rare-event transitions. For a list of shipped potentials, run `./SamplingSuite2D --help`. 
+
 
 ### Ackley
 `forcefield --ackley`. 
@@ -202,7 +201,7 @@ Minimum at $(0,0)$.
 
 ## How to add new potentials
 It is straightforward to add new 2D potentials to the codebase.
-To see how it is done, open the `simulation.h` file and scroll down to the definitions of the force functions, e.g., `inline void Simulation:: compute_force_ackley()` for the Ackley force:
+To see how it is done, open the `src/simulation.h` file and scroll down to the definitions of the force functions, e.g., `inline void Simulation:: compute_force_ackley()` for the Ackley force:
 ```c++
 // Ackley
 const double Ackley_2pi {2*M_PI};
@@ -229,7 +228,7 @@ inline void Simulation:: compute_force_Ackley(){
 The variables defined before the force function definition are global and can be accessed from within the function body. They are help-variables to make computations in the force function more efficient. Their name should always start with the name of the potential, in this case `Ackley_`.
 The name of the new force function is `compute_force_Ackley`. These naming patterns should be kept for any added force function.  
 In the function body, we have access to the `params` object, which holds the positions, velocities, and force fields (their `x` and `y` coordinates) of the current simulation state.  
-The `params.force.x` and `params.force.y` fields need to be updated with the forces, i.e. with the components of $-\nabla U(x,y)$ where $U$ is the 2D potential.
+The `params.force.x` and `params.force.y` fields need to be updated with the forces, i.e. with the components of $-\nabla U(x,y)$, where $U$ is the 2D potential.
 
 Once the new force function is written, it needs to be made known to the simulation class. Scroll up to the private members of the `Simulation` class and add the name of the new force routine to the others:
 ```c++
@@ -237,18 +236,18 @@ class Simulation{
 
     public:
 
-        // code
+        // code.
             
     private:
 
-        // other code
+        // other code.
 
         void (Simulation::* compute_force)();
         void compute_force_MullerBrown();
         void compute_force_Ackley();       
         void compute_force_Rosenbrock();
         void compute_force_Beale();
-        // add new force
+        // add new force.
 }
 ```
 In the constructor of the `Simulation` class, we need to add a line to the case distinction that picks the right force routine depending on the input parameters:
@@ -263,7 +262,7 @@ In the constructor of the `Simulation` class, we need to add a line to the case 
 
 ```
 
-Save the file changes and open the file `argparser.h` in order to modify the `--help` message so that it accurately informs the user of the forcefields available:
+Save the file changes and open the file `src/argparser.h` in order to modify the `--help` message so that it accurately informs the user of the forcefields available:
 ```c++
     // Define command line options.
     options.add_options()
@@ -275,15 +274,15 @@ Add the name of the new forcefield to the string
 ```c++
 "Forcefield. Allowed values 'mullerbrown', 'ackley', 'rosenbrock' or 'beale'."
 ```
-**Note** that the spelling needs to be identical to the one you used in the `else if` statement in the constructor before. Save the file and recompile the code.
+**Note** that the spelling needs to be identical to the one used in the `else if` statement in the constructor before. Save the file and recompile the code.
 
 ## Observables
-The processing of observables is governed by the `measurement.h` file.  
+The processing of observables is governed by the `src/measurement.h` file.  
 Currently, 4 observables are stored: The $x$-coordinate, the $y$-coordinate, the kinetic temperature, and the configurational temperature. The resulting output file will hold time series data for these observables, with the first column holding the iteration counts.   
-In case the sampler used is ZBAOABZ, it will automatically collect time series to three additional quantities: the adaptive stepsize `dt` (averaged as all the other observables), the unaveraged adaptive stepsize `dt`, and unaveraged $\zeta$ variable and print them as the last three columns of the output file. Even if averaging is activated, the last two of the three will **never** be averaged. In case of multiple trajectories, they will correspond to the first trajectory.
+In case the sampler used is ZBAOABZ, it will automatically collect time series for three additional quantities: the adaptive stepsize `dt` (averaged just like the other observables), the unaveraged adaptive stepsize `dt`, and the unaveraged $\zeta$ variable. The resulting `csv` output file will thus have three additional columns. Even if averaging is activated, the last two of the three will **never** be averaged. In case of multiple trajectories, they will correspond to the first trajectory.
 
 ### Change observables to collect
-To change the collected observables or add new ones, we need to modify the `take_measurement` routine of the `Measurement` class in the `measurement.h` file.
+To change the collected observables or add new ones, we need to modify the `take_measurement` routine of the `Measurement` class in the `src/measurement.h` file.
 ```c++
         void take_measurement(const parameters& params){
 
@@ -310,7 +309,7 @@ To change the collected observables or add new ones, we need to modify the `take
 
         };
 ```
-The `observables` vector can be filled with functions of the current simulation state given by the `params` object. If we want to add a new observable, for example the distance of the position to the origin, $\sqrt{x^2+y^2}$, we just need to add an additional line specifying that new observable:
+The `observables` vector can be filled with functions of the current simulation state given by the `params` object. To add a new observable, for example the distance of the position to the origin, $\sqrt{x^2+y^2}$, an additional line specifying that new observable needs to be added:
 ```c++
             observables[0] = params.position.x;	 // x-coordinate
             observables[1] = params.position.y;  // y-coordinate
@@ -328,13 +327,13 @@ We also need to add a new name for the observable:
             col_names[4] = "Distance to origin"; // Our new name.
             /*################################################################################*/
 ```
-Since the `observable` vector has grown, we need to adjust its size in the class constructor above, i.e. we need to change the part
+Since the `observable` vector has grown, its size needs to be updated in the class constructor above, i.e., this part
 ```c++
             /*######## ENTER THE NUMBER OF OBSERVABLES TO COLLECT ############*/
             no_observables = 4; 
             /*################################################################*/
 ```
-to
+needs to be changed to
 ```c++
             /*######## ENTER THE NUMBER OF OBSERVABLES TO COLLECT ############*/
             no_observables = 5; 
@@ -373,14 +372,14 @@ g(q,p)=\Omega ^{-1} \Vert \nabla U(q)\Vert^2,
 $$
 
 with scaling factor $\Omega>0$.  
-This dynamics computes a moving average over (the recent history) of the monitor function, where $\alpha$ governs how quickly the past is forgotten and $\Omega$ decides the overall magnitude of $\zeta$ for a given series of experienced forces.  
+This dynamics computes a moving average over (the recent history of) the monitor function, where $\alpha$ governs how quickly the past is forgotten and $\Omega$ decides the overall magnitude of $\zeta$ for a given series of experienced forces.  
 After a Z-step, the stepsize $\Delta t$ is adjusted according to
 
 $$
 \Delta t = \psi(\zeta) \Delta \tau, 
 $$
 
-where $\Delta \tau$ is the base stepsize and the Sundman transform kernel $\psi(\zeta)$ corresponds to $\psi^{(1)}$ in the reference below. This ensures $\Delta t \in (m \Delta \tau, M \Delta \tau]$ with $0<m<M$.  
+where $\Delta \tau$ is the base stepsize, and the Sundman transform kernel $\psi(\zeta)$ corresponds to $\psi^{(1)}$ in the reference below. This ensures $\Delta t \in (m \Delta \tau, M \Delta \tau]$ with $0<m<M$.  
 Once the new stepsize has been computed, a BAOAB transition at this stepsize is executed, followed by another Z-step.  
 
 The hyperparameters $\alpha$, $\Omega$, $\Delta \tau$, $m$, and $M$ can be passed as command line flags, where one can often use the default values for $m$ and $M$. 
@@ -388,7 +387,8 @@ The hyperparameters $\alpha$, $\Omega$, $\Delta \tau$, $m$, and $M$ can be passe
 **Reference**:  
 B. Leimkuhler, R. Lohmann, and P.A. Whalley.  
 **A Langevin sampling algorithm inspired by the Adam optimizer**.  
-*ArXiv* preprint [arxiv.org/abs/2504.18911](https://arxiv.org/abs/2504.18911) (2025).
+*ACM Transactions on Probabilistic Machine Learning* (2026). Just Accepted.  
+DOI: [10.1145/3806203](https://doi.org/10.1145/3806203)
 
 ### How to add new samplers
 ... to be continued
